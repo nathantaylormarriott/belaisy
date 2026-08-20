@@ -1,4 +1,9 @@
 import { useState, type FormEvent } from "react";
+import {
+  NETLIFY_FORM_ENDPOINT,
+  NETLIFY_FORM_NAME,
+  submitNetlifyForm,
+} from "@/lib/netlify-form";
 
 export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -6,15 +11,9 @@ export function ContactForm() {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
-    const data = new FormData(form);
     setStatus("sending");
     try {
-      const res = await fetch("/__forms.html", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(data as unknown as Record<string, string>).toString(),
-      });
-      if (!res.ok) throw new Error(String(res.status));
+      await submitNetlifyForm(form);
       form.reset();
       setStatus("sent");
     } catch {
@@ -27,14 +26,15 @@ export function ContactForm() {
 
   return (
     <form
-      name="contact"
+      name={NETLIFY_FORM_NAME}
+      action={NETLIFY_FORM_ENDPOINT}
       method="POST"
       data-netlify="true"
       netlify-honeypot="bot-field"
       onSubmit={onSubmit}
       className="space-y-6"
     >
-      <input type="hidden" name="form-name" value="contact" />
+      <input type="hidden" name="form-name" value={NETLIFY_FORM_NAME} />
       <p className="hidden">
         <label>
           Leave this empty: <input name="bot-field" />
@@ -77,7 +77,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="inline-flex items-center gap-3 bg-primary px-8 py-3.5 text-[0.7rem] uppercase tracking-[0.24em] text-primary-foreground transition-colors duration-500 hover:bg-brass hover:text-primary disabled:opacity-60"
+        className="btn-classic bg-primary text-primary-foreground transition-colors duration-500 hover:bg-brass hover:text-primary disabled:opacity-60"
       >
         {status === "sending" ? "Sending…" : "Send message"}
       </button>

@@ -1,27 +1,36 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { SiteNav } from "@/components/SiteNav";
 import { Hero } from "@/components/Hero";
 import { Reveal } from "@/components/Reveal";
 import { ContactForm } from "@/components/ContactForm";
-import { StickyFooter } from "@/components/StickyFooter";
+import { ReviewsCarousel } from "@/components/ReviewsCarousel";
+import { SiteFooter } from "@/components/SiteFooter";
 import { getRequestOrigin } from "@/lib/origin.functions";
-import { business, fullAddress, reviews } from "@/lib/business";
-import heroAsset from "@/assets/hero-shopfront.webp.asset.json";
-import bookshelvesAsset from "@/assets/bookshelves.jpg.asset.json";
-import wineTastingAsset from "@/assets/wine-tasting.jpg.asset.json";
-import breakfastAsset from "@/assets/breakfast.jpg.asset.json";
-import boardAsset from "@/assets/sharing-board.jpg.asset.json";
-import martiniAsset from "@/assets/espresso-martini.jpg.asset.json";
+import { fetchGoogleReviews } from "@/lib/google-reviews.functions";
+import { business, fullAddress } from "@/lib/business";
+import {
+  heroShopfront,
+  bookshelves,
+  wineTasting,
+  breakfast,
+  sharingBoard,
+  espressoMartini,
+} from "@/assets";
 
 const title = "The Cosy Chapter | Book Bar, Coffee & Wine in Atherstone";
 const description =
   "A boutique book, coffee and wine bar on Long Street, Atherstone. Cosy reading corners, curated sharing boards, espresso martinis and shelves worth losing an afternoon in.";
 
 export const Route = createFileRoute("/")({
-  loader: async () => ({ origin: await getRequestOrigin() }),
+  loader: async () => {
+    const [origin, reviews] = await Promise.all([getRequestOrigin(), fetchGoogleReviews()]);
+    return { origin, reviews };
+  },
   head: ({ loaderData }) => {
-    const ogImage = `${loaderData?.origin ?? ""}${heroAsset.url}`;
+    const ogImage = `${loaderData?.origin ?? ""}${heroShopfront}`;
+    const reviews = loaderData?.reviews ?? [];
+    const reviewCount = reviews.length > 0 ? String(reviews.length) : "4";
     return {
       meta: [
         { title },
@@ -68,8 +77,22 @@ export const Route = createFileRoute("/")({
             aggregateRating: {
               "@type": "AggregateRating",
               ratingValue: "5",
-              reviewCount: "4",
+              reviewCount,
             },
+            ...(reviews.length > 0
+              ? {
+                  review: reviews.map((r) => ({
+                    "@type": "Review",
+                    reviewRating: {
+                      "@type": "Rating",
+                      ratingValue: String(r.rating),
+                      bestRating: "5",
+                    },
+                    author: { "@type": "Person", name: r.author },
+                    reviewBody: r.quote,
+                  })),
+                }
+              : {}),
             openingHoursSpecification: business.hours.map((h) => ({
               "@type": "OpeningHoursSpecification",
               dayOfWeek: h.schema[0],
@@ -89,52 +112,33 @@ const chapters = [
     no: "I",
     title: "The Shelves",
     copy: "Wall-to-wall fiction, crime, romance and the odd coffee-table beauty — browse with a flat white in hand and leave with your next favourite.",
-    image: bookshelvesAsset.url,
+    image: bookshelves,
     alt: "Floor-to-ceiling bookshelves filled with fiction inside The Cosy Chapter",
   },
   {
     no: "II",
     title: "The Kitchen",
     copy: "Little breakfasts, warm pastries and generous sharing boards of charcuterie, cheese, hummus and chutney — made to linger over.",
-    image: boardAsset.url,
+    image: sharingBoard,
     alt: "Sharing board with charcuterie, cheeses, olives, hummus and toasted bread by candlelight",
   },
   {
     no: "III",
     title: "The Bar",
     copy: "Small-producer wines by the glass, espresso martinis after dark and tasting evenings that turn strangers into a table of friends.",
-    image: martiniAsset.url,
+    image: espressoMartini,
     alt: "Espresso martini on a dark wooden table with scattered coffee beans",
   },
 ];
 
 function Home() {
+  const { reviews } = Route.useLoaderData();
   return (
     <div className="bg-background">
       <SmoothScroll />
       <SiteNav />
-      <main>
+      <main className="relative z-10 bg-background">
         <Hero />
-
-        {/* Marquee */}
-        <section className="overflow-hidden border-y border-border bg-primary py-4">
-          <div className="marquee-track flex w-max gap-12 whitespace-nowrap">
-            {Array.from({ length: 2 }).map((_, i) => (
-              <div key={i} className="flex gap-12">
-                {["Books", "Coffee", "Wine", "Sharing boards", "Book club", "Tasting nights", "Cosy corners"].map(
-                  (word) => (
-                    <span
-                      key={word}
-                      className="text-[0.7rem] uppercase tracking-[0.34em] text-primary-foreground/70"
-                    >
-                      {word} <span className="text-brass">·</span>
-                    </span>
-                  ),
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* Story */}
         <section id="story" className="py-24 sm:py-32">
@@ -148,7 +152,7 @@ function Home() {
             </Reveal>
             <Reveal className="lg:col-span-6 lg:col-start-7" delay={120}>
               <p className="text-lg font-light leading-relaxed text-muted-foreground">
-                Behind the deep teal shopfront on Long Street you'll find something Atherstone
+                Behind the deep navy shopfront on Long Street you'll find something Atherstone
                 hasn't had before: a proper boutique book bar. Wing-back chairs and low lamps for
                 the morning readers, copper-topped tables and candles for the evening crowd, and
                 shelves that quietly invite you to stay one chapter longer.
@@ -165,7 +169,7 @@ function Home() {
                   ["Vol. 1", "Long Street"],
                 ].map(([big, small]) => (
                   <div key={small}>
-                    <p className="font-display text-3xl text-primary">{big}</p>
+                    <p className="font-numeric text-3xl text-primary">{big}</p>
                     <p className="mt-1 text-[0.65rem] uppercase tracking-[0.2em] text-muted-foreground">
                       {small}
                     </p>
@@ -188,11 +192,11 @@ function Home() {
               {chapters.map((c, i) => (
                 <Reveal
                   key={c.no}
-                  className="sticky top-24 overflow-hidden border border-brass/20 bg-primary"
+                  className="sticky top-24 overflow-hidden bg-primary"
                   delay={i * 80}
                 >
                   <div className="grid gap-0 md:grid-cols-2">
-                    <div className="relative aspect-4/3 overflow-hidden md:aspect-auto md:min-h-[420px]">
+                    <div className="content-image relative aspect-4/3 md:aspect-auto md:min-h-[420px]">
                       <img
                         src={c.image}
                         alt={c.alt}
@@ -225,20 +229,28 @@ function Home() {
                   Little breakfasts, long evenings
                 </h2>
               </div>
-              <p className="max-w-sm text-sm font-light leading-relaxed text-muted-foreground">
-                Everything is made for sharing — pastries and toast at the copper tables in the
-                morning sun, boards and bottles once the lamps come on.
-              </p>
+              <div className="flex max-w-sm flex-col gap-4">
+                <p className="text-sm font-light leading-relaxed text-muted-foreground">
+                  Everything is made for sharing — pastries and toast at the copper tables in the
+                  morning sun, boards and bottles once the lamps come on.
+                </p>
+                <Link
+                  to="/menu"
+                  className="btn-classic self-start border border-primary/30 text-primary transition-colors duration-500 hover:bg-primary hover:text-primary-foreground"
+                >
+                  View full menu
+                </Link>
+              </div>
             </Reveal>
 
             <div className="mt-14 grid gap-4 md:grid-cols-3">
               {[
-                { src: breakfastAsset.url, alt: "Little breakfast of toast, pastries and coffee on a copper café table", span: "md:col-span-2 aspect-16/10" },
-                { src: martiniAsset.url, alt: "Espresso martini served at the bar", span: "aspect-4/5" },
-                { src: wineTastingAsset.url, alt: "Guests at a wine tasting evening in the bookshop's back room", span: "aspect-4/5" },
-                { src: boardAsset.url, alt: "Charcuterie and cheese sharing board", span: "md:col-span-2 aspect-16/10" },
+                { src: breakfast, alt: "Little breakfast of toast, pastries and coffee on a copper café table", span: "md:col-span-2 aspect-16/10" },
+                { src: espressoMartini, alt: "Espresso martini served at the bar", span: "aspect-4/5" },
+                { src: wineTasting, alt: "Guests at a wine tasting evening in the bookshop's back room", span: "aspect-4/5" },
+                { src: sharingBoard, alt: "Charcuterie and cheese sharing board", span: "md:col-span-2 aspect-16/10" },
               ].map((img, i) => (
-                <Reveal key={img.src} delay={i * 90} className={`overflow-hidden ${img.span}`}>
+                <Reveal key={img.src} delay={i * 90} className={`content-image ${img.span}`}>
                   <img
                     src={img.src}
                     alt={img.alt}
@@ -252,7 +264,7 @@ function Home() {
         </section>
 
         {/* Reviews */}
-        <section className="border-y border-border bg-secondary py-24 sm:py-28">
+        <section className="overflow-hidden border-y border-border bg-secondary py-24 sm:py-28">
           <div className="container-tight text-center">
             <Reveal>
               <p className="eyebrow">Guest book</p>
@@ -268,44 +280,17 @@ function Home() {
               </h2>
             </Reveal>
 
-            {reviews.length > 0 ? (
-              <Reveal delay={120}>
-                <div className="mt-12 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4">
-                  {reviews.map((r) => (
-                    <figure
-                      key={r.author}
-                      className="min-w-[85%] snap-center border border-border bg-card p-8 text-left sm:min-w-[420px]"
-                    >
-                      <blockquote className="font-display text-xl italic leading-relaxed text-foreground">
-                        “{r.quote}”
-                      </blockquote>
-                      <figcaption className="mt-5 text-[0.65rem] uppercase tracking-[0.2em] text-muted-foreground">
-                        {r.author} · {r.source}
-                      </figcaption>
-                    </figure>
-                  ))}
-                </div>
-              </Reveal>
-            ) : (
+            {reviews.length === 0 ? (
               <Reveal delay={120}>
                 <p className="mx-auto mt-6 max-w-lg text-base font-light leading-relaxed text-muted-foreground">
                   Every review left on our Google Business Profile so far is a five-star one.
                   Read them for yourself — or add your own after your visit.
                 </p>
               </Reveal>
-            )}
-
-            <Reveal delay={200}>
-              <a
-                href={business.google}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-10 inline-flex items-center gap-3 border border-primary/30 px-7 py-3.5 text-[0.7rem] uppercase tracking-[0.24em] text-primary transition-colors duration-500 hover:bg-primary hover:text-primary-foreground"
-              >
-                Read our Google reviews
-              </a>
-            </Reveal>
+            ) : null}
           </div>
+
+          {reviews.length > 0 ? <ReviewsCarousel reviews={reviews} /> : null}
         </section>
 
         {/* Visit — NAP, hours, map */}
@@ -345,7 +330,7 @@ function Home() {
                     <dt className="uppercase tracking-[0.16em] text-muted-foreground text-[0.7rem]">
                       {h.day}
                     </dt>
-                    <dd>
+                    <dd className="font-numeric">
                       {h.open} – {h.close}
                     </dd>
                   </div>
@@ -354,18 +339,10 @@ function Home() {
 
               <div className="mt-8 flex flex-wrap gap-4">
                 <a
-                  href={business.google}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-primary px-6 py-3 text-[0.7rem] uppercase tracking-[0.22em] text-primary-foreground transition-colors duration-500 hover:bg-brass hover:text-primary"
-                >
-                  Google Business Profile
-                </a>
-                <a
                   href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${business.name}, ${fullAddress}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border border-primary/30 px-6 py-3 text-[0.7rem] uppercase tracking-[0.22em] text-primary transition-colors duration-500 hover:bg-primary hover:text-primary-foreground"
+                  className="btn-classic border border-primary/30 text-primary transition-colors duration-500 hover:bg-primary hover:text-primary-foreground"
                 >
                   Get directions
                 </a>
@@ -398,7 +375,7 @@ function Home() {
                 Group bookings, private hire, book clubs and wine tasting evenings — tell us what
                 you're planning and we'll make room for it.
               </p>
-              <div className="mt-10 flex gap-3">
+              <div className="mt-10 flex gap-5">
                 <SocialLink href={business.instagram} label="Instagram">
                   <path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.3 2.2.4.6.2 1 .5 1.4.9s.7.8.9 1.4c.1.4.3 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.8-.4 2.2-.2.6-.5 1-.9 1.4s-.8.7-1.4.9c-.4.1-1 .3-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.3-2.2-.4-.6-.2-1-.5-1.4-.9s-.7-.8-.9-1.4c-.1-.4-.3-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.8.4-2.2.2-.6.5-1 .9-1.4s.8-.7 1.4-.9c.4-.1 1-.3 2.2-.4 1.3-.1 1.7-.1 4.8-.1m0 5.3a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9m0 7.4a2.9 2.9 0 1 1 0-5.8 2.9 2.9 0 0 1 0 5.8m5.7-7.6a1.1 1.1 0 1 1-2.1 0 1.1 1.1 0 0 1 2.1 0" />
                 </SocialLink>
@@ -412,40 +389,8 @@ function Home() {
             </Reveal>
           </div>
         </section>
-
-        {/* Footer */}
-        <footer className="bg-primary py-16 text-primary-foreground">
-          <div className="container-tight">
-            <div className="flex flex-wrap items-start justify-between gap-10">
-              <div>
-                <p className="font-display text-2xl">{business.name}</p>
-                <p className="eyebrow mt-2">{business.tagline}</p>
-              </div>
-              <div className="text-sm font-light leading-relaxed text-primary-foreground/75">
-                {business.street}, {business.town},<br />
-                {business.county} {business.postcode}
-                <br />
-                <a href={business.phoneHref} className="hover:text-brass">
-                  {business.phoneDisplay}
-                </a>
-              </div>
-              <div className="flex gap-3">
-                <SocialLink href={business.instagram} label="Instagram" light>
-                  <path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.3 2.2.4.6.2 1 .5 1.4.9s.7.8.9 1.4c.1.4.3 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.8-.4 2.2-.2.6-.5 1-.9 1.4s-.8.7-1.4.9c-.4.1-1 .3-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.3-2.2-.4-.6-.2-1-.5-1.4-.9s-.7-.8-.9-1.4c-.1-.4-.3-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.8.4-2.2.2-.6.5-1 .9-1.4s.8-.7 1.4-.9c.4-.1 1-.3 2.2-.4 1.3-.1 1.7-.1 4.8-.1m0 5.3a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9m0 7.4a2.9 2.9 0 1 1 0-5.8 2.9 2.9 0 0 1 0 5.8m5.7-7.6a1.1 1.1 0 1 1-2.1 0 1.1 1.1 0 0 1 2.1 0" />
-                </SocialLink>
-                <SocialLink href={business.facebook} label="Facebook" light>
-                  <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.7-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12" />
-                </SocialLink>
-              </div>
-            </div>
-            <div className="rule-brass mt-12 opacity-40" />
-            <p className="mt-6 text-[0.65rem] uppercase tracking-[0.2em] text-primary-foreground/50">
-              © {new Date().getFullYear()} {business.name} · {business.town}, Warwickshire
-            </p>
-          </div>
-        </footer>
       </main>
-      <StickyFooter />
+      <SiteFooter />
     </div>
   );
 }
@@ -467,13 +412,11 @@ function SocialLink({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className={`inline-flex h-11 w-11 items-center justify-center border transition-colors duration-500 ${
-        light
-          ? "border-brass/40 text-brass hover:bg-brass hover:text-primary"
-          : "border-primary/25 text-primary hover:bg-primary hover:text-primary-foreground"
+      className={`inline-flex items-center justify-center p-1 transition-colors duration-500 ${
+        light ? "text-brass hover:text-brass/75" : "text-primary hover:text-brass"
       }`}
     >
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <svg className="h-8 w-8" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         {children}
       </svg>
     </a>

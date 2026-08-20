@@ -1,0 +1,9 @@
+export { default as logo } from "./new-logo.webp";
+export { default as heroShopfront } from "./hero-shopfront.webp";
+export { default as mobileHero } from "./mobile-hero.webp";
+export { default as bookshelves } from "./bookshelves.jpg";
+export { default as sharingBoard } from "./sharing-board.jpg";
+export { default as espressoMartini } from "./espresso-martini.jpg";
+export { default as breakfast } from "./breakfast.jpg";
+export { default as wineTasting } from "./wine-tasting.jpg";
+export { default as menuFood } from "./menu-food.png";

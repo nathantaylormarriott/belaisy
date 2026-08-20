@@ -6,7 +6,7 @@
 
 /*
  * The Cosy Chapter — design system.
- * Palette drawn from the shopfront: petrol teal joinery, aged brass signwriting,
+ * Palette drawn from the shopfront: navy joinery, aged brass signwriting,
  * warm paper cream, oxblood book-cloth.
  */
 
@@ -53,10 +53,10 @@
   --card-foreground: oklch(0.19 0.018 190);
   --popover: oklch(0.982 0.008 84);
   --popover-foreground: oklch(0.19 0.018 190);
-  --primary: oklch(0.36 0.048 197);
+  --primary: oklch(0.239 0.053 231);
   --primary-foreground: oklch(0.968 0.014 84);
   --secondary: oklch(0.92 0.018 84);
-  --secondary-foreground: oklch(0.28 0.03 197);
+  --secondary-foreground: oklch(0.239 0.04 231);
   --muted: oklch(0.925 0.014 84);
   --muted-foreground: oklch(0.47 0.02 190);
   --accent: oklch(0.68 0.098 71);
@@ -71,10 +71,22 @@
   --shadow-soft: 0 24px 60px -30px oklch(0.19 0.018 190 / 0.45);
   --gradient-veil: linear-gradient(
     to top,
-    oklch(0.19 0.018 190 / 0.88) 0%,
-    oklch(0.19 0.018 190 / 0.45) 45%,
-    oklch(0.19 0.018 190 / 0.25) 100%
+    oklch(0.13 0.04 72 / 0.52) 0%,
+    oklch(0.55 0.05 72 / 0.24) 48%,
+    oklch(0.58 0.04 72 / 0.16) 100%
   );
+  --hero-vignette: radial-gradient(
+    ellipse 90% 80% at 50% 44%,
+    oklch(0.11 0.045 230 / 0.32) 0%,
+    oklch(0.13 0.04 230 / 0.14) 48%,
+    transparent 72%
+  );
+  --hero-logo-shadow:
+    drop-shadow(0 6px 28px oklch(0.1 0.04 72 / 0.62))
+    drop-shadow(0 2px 10px oklch(0.08 0.03 72 / 0.48));
+  --hero-text-shadow:
+    0 2px 14px oklch(0.12 0.04 72 / 0.45),
+    0 1px 3px oklch(0.1 0.03 72 / 0.3);
 }
 
 @layer base {
@@ -130,6 +142,59 @@
   height: 1px;
 }
 
+@utility font-numeric {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+@utility hero-logo-shadow {
+  filter: var(--hero-logo-shadow);
+}
+
+@utility hero-copy-shadow {
+  &,
+  & * {
+    text-shadow: var(--hero-text-shadow);
+  }
+}
+
+@utility content-image {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+@utility btn-classic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.875rem 1.75rem;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  transition:
+    color 0.5s,
+    background-color 0.5s,
+    border-color 0.5s;
+}
+
+@keyframes arrow-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
+
+.animate-arrow-nudge {
+  animation: arrow-nudge 1.25s ease-in-out infinite;
+}
+
 /* Scroll reveal */
 .reveal {
   opacity: 0;
@@ -154,6 +219,29 @@
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+}
+
+@keyframes reviews-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-reviews {
+  animation: reviews-marquee 72s linear infinite;
+}
+
+.marquee-reviews:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-reviews {
+    animation: none;
   }
 }
 

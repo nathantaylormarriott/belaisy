@@ -1,6 +1,8 @@
 export const business = {
   name: "The Cosy Chapter",
   tagline: "Books · Coffee · Wine",
+  heroTagline:
+    "Boutique Book, Coffee and Wine Bar with Cosy Reading and Curated Foods.",
   street: "45–47 Long Street",
   town: "Atherstone",
   county: "Warwickshire",
@@ -26,8 +28,5 @@ export const business = {
 
 export const fullAddress = `${business.street}, ${business.town}, ${business.county} ${business.postcode}`;
 
-/**
- * Google reviews (5.0 average). Replace the quotes below with the live text
- * from the Google Business Profile — Google blocks automated review scraping.
- */
-export const reviews: { quote: string; author: string; source: string }[] = [];
+/** Google Knowledge Graph ID — used for linking; reviews load via Places API. */
+export const businessGoogleKgmid = "/g/11zhfsd12t" as const;
