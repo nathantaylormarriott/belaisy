@@ -24,7 +24,7 @@ export function Reveal({
     if (!el) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) setState("in");
+        if (entry?.isIntersecting) setState("in");
         else if (out) setState((prev) => (prev === "in" ? "out" : prev));
       },
       { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
