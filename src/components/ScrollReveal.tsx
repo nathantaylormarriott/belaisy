@@ -35,7 +35,7 @@ export function ScrollReveal({
       className={cn(className)}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, amount, margin: "-48px" }}
+      viewport={{ once, amount, margin: "0px 0px -6% 0px" }}
       transition={{ duration: 0.75, ease: SITE_REVEAL_EASE, delay }}
       variants={defaultVariants}
     >

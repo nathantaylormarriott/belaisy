@@ -196,29 +196,38 @@
   animation: arrow-nudge 1.25s ease-in-out infinite;
 }
 
-/* Scroll reveal */
+/* Lenis — keep native scroll behaviour off while smoothing */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Scroll reveal — opacity only on inner wrapper so sticky parents stay stable */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition:
-    opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
 .reveal.is-in {
   opacity: 1;
-  transform: none;
 }
+
 .reveal.is-out {
   opacity: 0;
-  transform: translateY(-14px);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal.is-out {
     opacity: 1 !important;
-    transform: none !important;
     transition: none !important;
   }
 }

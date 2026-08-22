@@ -12,10 +12,11 @@ import {
   Send,
   Star,
 } from "lucide-react";
-import { mobileHero } from "@/assets";
+import { mobileHero, nightMobileHero } from "@/assets";
 import { SiteLogo } from "@/components/SiteLogo";
 import { HeroTagline } from "@/components/HeroTagline";
 import { business, fullAddress } from "@/lib/business";
+import { useHeroTime } from "@/lib/hero-time";
 import {
   NETLIFY_FORM_ENDPOINT,
   NETLIFY_FORM_NAME,
@@ -306,6 +307,7 @@ export const Route = createFileRoute("/share")({
 
 function SharePage() {
   const [contactOpen, setContactOpen] = useState(false);
+  const { isNight } = useHeroTime();
 
   return (
     <div className="relative min-h-[100dvh] overflow-x-hidden bg-background font-sans antialiased">
@@ -325,7 +327,22 @@ function SharePage() {
           )}
         >
           <div className="pointer-events-none absolute inset-0 isolate" aria-hidden>
-            <img src={mobileHero} alt="" className="h-full w-full object-cover object-center" />
+            <img
+              src={mobileHero}
+              alt=""
+              className={cn(
+                "h-full w-full object-cover object-center transition-opacity duration-700 ease-in-out",
+                isNight ? "opacity-0" : "opacity-100",
+              )}
+            />
+            <img
+              src={nightMobileHero}
+              alt=""
+              className={cn(
+                "absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ease-in-out",
+                isNight ? "opacity-100" : "opacity-0",
+              )}
+            />
             <div className="absolute inset-0" style={{ background: SHARE_CARD_OVERLAY }} />
           </div>
 

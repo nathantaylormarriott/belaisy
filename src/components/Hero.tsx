@@ -1,8 +1,15 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { SiteLogo } from "@/components/SiteLogo";
 import { HeroTagline } from "@/components/HeroTagline";
-import heroShopfront from "@/assets/hero-shopfront.webp";
-import mobileHero from "@/assets/mobile-hero.webp";
+import {
+  heroShopfront,
+  mobileHero,
+  nightHeroDesktop,
+  nightMobileHero,
+} from "@/assets";
+import { useHeroTime } from "@/lib/hero-time";
+import { subscribeLenisScroll } from "@/lib/lenis-scroll";
+import { cn } from "@/lib/utils";
 
 const MARQUEE_WORDS = [
   "Books",
@@ -43,22 +50,14 @@ function HeroMarqueeTrack() {
 }
 
 export function Hero() {
+  const { isNight } = useHeroTime();
   const [offset, setOffset] = useState(0);
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let frame = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => setOffset(window.scrollY));
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(frame);
-    };
+
+    return subscribeLenisScroll(setOffset);
   }, []);
 
   const fade = Math.max(0, 1 - offset / 620);
@@ -74,10 +73,29 @@ export function Hero() {
           className="absolute inset-x-0 -top-[12%] h-[124%] will-change-transform"
           style={{ transform: `translate3d(0, ${offset * 0.28}px, 0) scale(1.04)` }}
         >
-          <picture>
+          <picture
+            className={cn(
+              "absolute inset-0 transition-opacity duration-700 ease-in-out",
+              isNight ? "opacity-0" : "opacity-100",
+            )}
+          >
             <source media="(min-width: 768px)" srcSet={heroShopfront} />
             <img
               src={mobileHero}
+              alt=""
+              aria-hidden="true"
+              className="h-full w-full object-cover object-center"
+            />
+          </picture>
+          <picture
+            className={cn(
+              "absolute inset-0 transition-opacity duration-700 ease-in-out",
+              isNight ? "opacity-100" : "opacity-0",
+            )}
+          >
+            <source media="(min-width: 768px)" srcSet={nightHeroDesktop} />
+            <img
+              src={nightMobileHero}
               alt="The Cosy Chapter — book bar, coffee and wine on Long Street, Atherstone"
               className="h-full w-full object-cover object-center"
               fetchPriority="high"

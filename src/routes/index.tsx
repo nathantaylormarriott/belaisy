@@ -5,6 +5,7 @@ import { Hero } from "@/components/Hero";
 import { Reveal } from "@/components/Reveal";
 import { ContactForm } from "@/components/ContactForm";
 import { ReviewsCarousel } from "@/components/ReviewsCarousel";
+import { GoogleMapEmbed } from "@/components/GoogleMapEmbed";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getRequestOrigin } from "@/lib/origin.functions";
 import { fetchGoogleReviews } from "@/lib/google-reviews.functions";
@@ -295,7 +296,7 @@ function Home() {
 
         {/* Visit — NAP, hours, map */}
         <section id="visit" className="py-24 sm:py-32">
-          <div className="container-tight grid gap-14 lg:grid-cols-12">
+          <div className="container-tight grid gap-14 lg:grid-cols-12 lg:items-stretch">
             <Reveal className="lg:col-span-5">
               <p className="eyebrow">Find us</p>
               <h2 className="mt-5 text-4xl leading-tight sm:text-5xl">Visit The Cosy Chapter</h2>
@@ -341,17 +342,9 @@ function Home() {
               </div>
             </Reveal>
 
-            <Reveal className="lg:col-span-7" delay={140}>
-              <div className="h-[420px] w-full overflow-hidden border border-border lg:h-full lg:min-h-[560px]">
-                <iframe
-                  title={`Map showing ${business.name}, ${fullAddress}`}
-                  src={`https://www.google.com/maps?q=${encodeURIComponent(`${business.name}, ${fullAddress}`)}&output=embed`}
-                  className="h-full w-full"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              </div>
-            </Reveal>
+            <div className="lg:col-span-7">
+              <GoogleMapEmbed className="h-[420px] w-full lg:h-full lg:min-h-[560px]" />
+            </div>
           </div>
         </section>
 
