@@ -1,18 +1,28 @@
-/** Netlify Forms — submissions must POST here (not "/" or any third-party URL). */
+/** Netlify Forms — submissions must POST to a static path, not the SSR handler. */
 export const NETLIFY_FORM_NAME = "contact";
-export const NETLIFY_FORM_ENDPOINT = "/__forms.html";
+export const NETLIFY_FORM_ENDPOINT = "/forms.html";
 
-export async function submitNetlifyForm(form: HTMLFormElement): Promise<void> {
-  const data = new FormData(form);
+function encodeFormData(form: HTMLFormElement) {
+  const params = new URLSearchParams();
 
-  if (!data.get("form-name")) {
-    data.set("form-name", NETLIFY_FORM_NAME);
+  for (const [key, value] of new FormData(form).entries()) {
+    if (typeof value === "string") {
+      params.append(key, value);
+    }
   }
 
+  if (!params.get("form-name")) {
+    params.set("form-name", NETLIFY_FORM_NAME);
+  }
+
+  return params;
+}
+
+export async function submitNetlifyForm(form: HTMLFormElement): Promise<void> {
   const response = await fetch(NETLIFY_FORM_ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams(data as unknown as Record<string, string>).toString(),
+    body: encodeFormData(form).toString(),
   });
 
   if (!response.ok) {

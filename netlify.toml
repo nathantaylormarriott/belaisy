@@ -1,3 +1,10 @@
 [build]
   command = "npm run build"
   publish = "dist"
+
+# Keep form POSTs on the static file so Netlify Forms can process them (not the SSR handler).
+[[redirects]]
+  from = "/forms.html"
+  to = "/forms.html"
+  status = 200
+  force = true
