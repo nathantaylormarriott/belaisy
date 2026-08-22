@@ -141,18 +141,16 @@ function Home() {
       <main className="relative z-10 bg-background">
         <Hero />
 
-        {/* Story */}
+        {/* Welcome — story & contact */}
         <section id="story" className="py-24 sm:py-32">
-          <div className="container-tight grid gap-14 lg:grid-cols-12">
+          <div className="container-tight grid gap-14 lg:grid-cols-12 lg:items-start">
             <Reveal className="lg:col-span-5">
-              <p className="eyebrow">Chapter one</p>
+              <p className="eyebrow">Welcome</p>
               <h2 className="mt-5 text-4xl leading-tight sm:text-5xl">
                 A bookshop that pours,
                 <span className="block italic text-primary/70">a wine bar that reads.</span>
               </h2>
-            </Reveal>
-            <Reveal className="lg:col-span-6 lg:col-start-7" delay={120}>
-              <p className="text-lg font-light leading-relaxed text-muted-foreground">
+              <p className="mt-8 text-lg font-light leading-relaxed text-muted-foreground">
                 Behind the deep navy shopfront on Long Street you'll find something Atherstone
                 hasn't had before: a proper boutique book bar. Wing-back chairs and low lamps for
                 the morning readers, copper-topped tables and candles for the evening crowd, and
@@ -163,21 +161,24 @@ function Home() {
                 pastries, boards, book clubs and tasting evenings — all under the same roof, all
                 unhurried.
               </p>
-              <div className="mt-10 grid grid-cols-3 gap-6 border-t border-border pt-8">
-                {[
-                  ["5.0", "Google rating"],
-                  ["8am", "Coffee from"],
-                  ["Vol. 1", "Long Street"],
-                ].map(([big, small]) => (
-                  <div key={small}>
-                    <p className="font-numeric text-3xl text-primary">{big}</p>
-                    <p className="mt-1 text-[0.65rem] uppercase tracking-[0.2em] text-muted-foreground">
-                      {small}
-                    </p>
-                  </div>
-                ))}
-              </div>
             </Reveal>
+
+            <div className="flex flex-col gap-12 lg:col-span-6 lg:col-start-7">
+              <Reveal delay={120}>
+                <div id="contact" className="border-b border-border pb-8">
+                  <p className="font-display text-2xl leading-snug text-primary sm:text-3xl">
+                    Book a table, or a whole chapter
+                  </p>
+                  <p className="mt-4 text-base font-light leading-relaxed text-muted-foreground">
+                    Group bookings, private hire, book clubs and wine tasting evenings — tell us what
+                    you're planning and we'll make room for it.
+                  </p>
+                </div>
+              </Reveal>
+              <Reveal delay={180}>
+                <ContactForm />
+              </Reveal>
+            </div>
           </div>
         </section>
 
@@ -347,63 +348,8 @@ function Home() {
             </div>
           </div>
         </section>
-
-        {/* Contact */}
-        <section id="contact" className="border-t border-border bg-secondary py-24 sm:py-32">
-          <div className="container-tight grid gap-14 lg:grid-cols-12">
-            <Reveal className="lg:col-span-5">
-              <p className="eyebrow">Say hello</p>
-              <h2 className="mt-5 text-4xl leading-tight sm:text-5xl">
-                Book a table, or a whole chapter
-              </h2>
-              <p className="mt-6 text-base font-light leading-relaxed text-muted-foreground">
-                Group bookings, private hire, book clubs and wine tasting evenings — tell us what
-                you're planning and we'll make room for it.
-              </p>
-              <div className="mt-10 flex gap-5">
-                <SocialLink href={business.instagram} label="Instagram">
-                  <path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.3 2.2.4.6.2 1 .5 1.4.9s.7.8.9 1.4c.1.4.3 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.8-.4 2.2-.2.6-.5 1-.9 1.4s-.8.7-1.4.9c-.4.1-1 .3-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.3-2.2-.4-.6-.2-1-.5-1.4-.9s-.7-.8-.9-1.4c-.1-.4-.3-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.8.4-2.2.2-.6.5-1 .9-1.4s.8-.7 1.4-.9c.4-.1 1-.3 2.2-.4 1.3-.1 1.7-.1 4.8-.1m0 5.3a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9m0 7.4a2.9 2.9 0 1 1 0-5.8 2.9 2.9 0 0 1 0 5.8m5.7-7.6a1.1 1.1 0 1 1-2.1 0 1.1 1.1 0 0 1 2.1 0" />
-                </SocialLink>
-                <SocialLink href={business.facebook} label="Facebook">
-                  <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.7-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12" />
-                </SocialLink>
-              </div>
-            </Reveal>
-            <Reveal className="lg:col-span-6 lg:col-start-7" delay={140}>
-              <ContactForm />
-            </Reveal>
-          </div>
-        </section>
       </main>
       <SiteFooter />
     </div>
-  );
-}
-
-function SocialLink({
-  href,
-  label,
-  children,
-  light = false,
-}: {
-  href: string;
-  label: string;
-  children: React.ReactNode;
-  light?: boolean;
-}) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={label}
-      className={`inline-flex items-center justify-center p-1 transition-colors duration-500 ${
-        light ? "text-brass hover:text-brass/75" : "text-primary hover:text-brass"
-      }`}
-    >
-      <svg className="h-8 w-8" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        {children}
-      </svg>
-    </a>
   );
 }
