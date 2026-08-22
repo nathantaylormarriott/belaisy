@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { mobileHero } from "@/assets";
 import { SiteLogo } from "@/components/SiteLogo";
+import { HeroTagline } from "@/components/HeroTagline";
 import { business, fullAddress } from "@/lib/business";
 import {
   NETLIFY_FORM_ENDPOINT,
@@ -30,15 +31,15 @@ const SHARE_CARD_OVERLAY =
   "linear-gradient(to bottom, oklch(0.18 0.05 231 / 0.34) 0%, oklch(0.17 0.05 231 / 0.22) 42%, oklch(0.16 0.05 231 / 0.5) 100%)";
 
 const SHARE_TAB_CLASS =
-  "group flex w-full min-h-[3.25rem] items-center rounded-xl border border-paper/35 bg-paper/95 px-5 py-3 text-base font-medium text-ink shadow-[0_2px_10px_rgba(0,0,0,0.16)] transition-colors hover:bg-[oklch(0.975_0.012_84)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brass/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:scale-[0.99]";
+  "group flex w-full min-h-[3.25rem] items-center rounded-xl border border-ink/10 bg-paper px-5 py-3 text-base font-medium text-ink shadow-[0_2px_10px_rgba(0,0,0,0.16)] transition-colors hover:bg-[oklch(0.94_0.014_84)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brass/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:scale-[0.99]";
 
 const SHARE_TAB_ICON_CLASS = "h-5 w-5 shrink-0 text-primary";
 
 const SHARE_FIELD_CLASS =
-  "h-11 w-full rounded-xl border border-ink/10 bg-[oklch(0.975_0.012_84)]/75 px-4 text-base text-ink placeholder:text-ink/45 transition-colors focus:border-primary/30 focus:outline-none focus:ring-2 focus:ring-brass/40";
+  "h-11 w-full rounded-xl border border-ink/10 bg-paper px-4 text-base text-ink placeholder:text-ink/45 transition-colors focus:border-primary/30 focus:outline-none focus:ring-2 focus:ring-brass/40";
 
 const SHARE_INSET_PANEL_CLASS =
-  "overflow-hidden rounded-xl border border-paper/35 bg-paper/95 shadow-[0_2px_10px_rgba(0,0,0,0.16)]";
+  "overflow-hidden rounded-xl border border-ink/10 bg-paper shadow-[0_2px_10px_rgba(0,0,0,0.16)]";
 
 const morphTransition = { duration: 0.38, ease: [0.25, 0.1, 0.25, 1] as const };
 
@@ -159,7 +160,7 @@ function ShareExpandButton({
       onClick={onClick}
       className={cn(
         SHARE_TAB_CLASS,
-        "rounded-none border-0 bg-transparent shadow-none hover:bg-[oklch(0.975_0.012_84)]/55",
+        "rounded-none border-0 shadow-none hover:bg-[oklch(0.94_0.014_84)]",
       )}
     >
       <ShareTabContent
@@ -330,9 +331,7 @@ function SharePage() {
 
           <header className="relative z-10 flex flex-col items-center px-5 pt-[max(4.5rem,env(safe-area-inset-top))] text-center md:px-0 md:pt-10">
             <SiteLogo variant="onDark" className="h-16 sm:h-[4.5rem]" />
-            <p className="mt-5 max-w-[20rem] text-sm font-medium leading-snug text-white sm:max-w-xs sm:text-[15px] sm:leading-relaxed">
-              {business.heroTagline}
-            </p>
+            <HeroTagline className="mt-5 max-w-[22rem] text-base sm:max-w-sm sm:text-lg" />
             <nav className="mt-5 flex items-center justify-center gap-2" aria-label="Social links">
               {SOCIAL_LINKS.map(({ label, href, Icon }) => (
                 <a

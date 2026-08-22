@@ -1,8 +1,10 @@
 export const business = {
   name: "The Cosy Chapter",
   tagline: "Books · Coffee · Wine",
-  heroTagline:
-    "Boutique Book, Coffee and Wine Bar with Cosy Reading and Curated Foods.",
+  heroTagline: [
+    "Boutique Book, Coffee and Wine Bar",
+    "with Cosy Reading and Curated Foods.",
+  ] as const,
   street: "45–47 Long Street",
   town: "Atherstone",
   county: "Warwickshire",

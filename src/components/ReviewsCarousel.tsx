@@ -7,7 +7,7 @@ type ReviewsCarouselProps = {
 
 function ReviewCard({ review }: { review: GoogleReview }) {
   return (
-    <figure className="flex w-[min(420px,calc(100vw-3rem))] shrink-0 flex-col rounded-[var(--radius-lg)] border border-border/60 bg-card p-8 text-left shadow-[var(--shadow-soft)] sm:w-[420px] sm:p-10">
+    <figure className="flex w-[min(420px,calc(100vw-3rem))] shrink-0 flex-col p-8 text-left [filter:drop-shadow(0_10px_28px_oklch(0.19_0.018_190/0.22))] sm:w-[420px] sm:p-10">
       <div className="mb-4 flex gap-1 text-brass" aria-hidden="true">
         {Array.from({ length: review.rating ?? 5 }).map((_, starIndex) => (
           <svg key={starIndex} width="14" height="14" viewBox="0 0 24 24" fill="currentColor">

@@ -12,12 +12,12 @@ const links = [
 export function SiteNav() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-primary py-4 shadow-[var(--shadow-soft)]">
-      <div className="container-tight grid grid-cols-[1fr_auto_1fr] items-center gap-4 sm:gap-6">
+      <div className="container-tight grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4 lg:grid-cols-[1fr_auto_1fr] lg:gap-6">
         <a href="/#top" className="group shrink-0 justify-self-start">
           <SiteLogo variant="onDark" />
         </a>
 
-        <nav className="hidden items-center justify-center gap-9 lg:flex">
+        <nav className="hidden min-w-0 items-center justify-center gap-9 justify-self-center lg:flex">
           {links.map((l) =>
             "route" in l && l.route ? (
               <Link
@@ -39,7 +39,7 @@ export function SiteNav() {
           )}
         </nav>
 
-        <div className="flex items-center justify-self-end gap-2 sm:gap-3">
+        <div className="flex shrink-0 items-center justify-self-end gap-2 sm:gap-3">
           <a
             href={business.phoneHref}
             className="btn-classic border border-brass/70 px-4 py-2.5 text-brass transition-colors duration-500 hover:bg-brass hover:text-primary sm:px-5"

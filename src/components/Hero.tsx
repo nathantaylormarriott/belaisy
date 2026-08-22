@@ -1,8 +1,8 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { SiteLogo } from "@/components/SiteLogo";
+import { HeroTagline } from "@/components/HeroTagline";
 import heroShopfront from "@/assets/hero-shopfront.webp";
 import mobileHero from "@/assets/mobile-hero.webp";
-import { business } from "@/lib/business";
 
 const MARQUEE_WORDS = [
   "Books",
@@ -14,25 +14,31 @@ const MARQUEE_WORDS = [
   "Cosy corners",
 ] as const;
 
-function MarqueeWords() {
+function MarqueeSeparator() {
   return (
-    <div className="flex items-center gap-12 whitespace-nowrap">
-      {MARQUEE_WORDS.map((word, index) => (
-        <Fragment key={word}>
-          {index > 0 && (
-            <span
-              className="shrink-0 text-[0.7rem] leading-none tracking-[0.34em] text-brass"
-              aria-hidden="true"
-            >
-              ·
-            </span>
-          )}
-          <span className="shrink-0 text-[0.7rem] uppercase leading-none tracking-[0.34em] text-primary-foreground/70">
+    <span
+      className="shrink-0 font-display text-xl leading-none text-brass sm:text-2xl"
+      aria-hidden="true"
+    >
+      ·
+    </span>
+  );
+}
+
+function HeroMarqueeTrack() {
+  const loop = [...MARQUEE_WORDS, ...MARQUEE_WORDS];
+
+  return (
+    <>
+      {loop.map((word, index) => (
+        <Fragment key={`${word}-${index}`}>
+          {index > 0 ? <MarqueeSeparator /> : null}
+          <span className="shrink-0 font-display text-xl leading-none text-white sm:text-2xl">
             {word}
           </span>
         </Fragment>
       ))}
-    </div>
+    </>
   );
 }
 
@@ -78,7 +84,7 @@ export function Hero() {
             />
           </picture>
           <div className="absolute inset-0" style={{ background: "var(--gradient-veil)" }} />
-          <div className="absolute inset-0 bg-primary/20" />
+          <div className="absolute inset-0 bg-primary/12" />
           <div className="absolute inset-0" style={{ background: "var(--hero-vignette)" }} />
         </div>
       </div>
@@ -91,20 +97,16 @@ export function Hero() {
           <h1 className="hero-logo-shadow flex justify-center">
             <SiteLogo className="h-24 w-auto sm:h-32 lg:h-40" />
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-base font-medium leading-relaxed text-white">
-            {business.heroTagline}
-          </p>
+          <HeroTagline className="mt-6 max-w-xl leading-relaxed" />
         </div>
       </div>
 
       <div
-        className="relative z-10 overflow-hidden bg-primary py-4"
+        className="hero-copy-shadow relative z-10 overflow-hidden py-5 sm:py-6"
         aria-label="Highlights"
       >
-        <div className="marquee-track flex w-max items-center gap-12">
-          {Array.from({ length: 2 }).map((_, i) => (
-            <MarqueeWords key={i} />
-          ))}
+        <div className="marquee-track flex w-max items-center gap-8 whitespace-nowrap sm:gap-12">
+          <HeroMarqueeTrack />
         </div>
       </div>
     </section>

@@ -311,14 +311,6 @@ function Home() {
                   <br />
                   United Kingdom
                 </p>
-                <p className="mt-4 text-base font-light">
-                  <a
-                    href={business.phoneHref}
-                    className="underline decoration-brass underline-offset-4 transition-colors hover:text-brass"
-                  >
-                    {business.phoneDisplay}
-                  </a>
-                </p>
               </address>
 
               <dl className="mt-10 border-t border-border">
