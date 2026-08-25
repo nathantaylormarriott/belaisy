@@ -1,5 +1,4 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import { SiteLogo } from "@/components/SiteLogo";
 import { HeroTagline } from "@/components/HeroTagline";
 import { heroShopfront } from "@/assets";
 import { subscribeLenisScroll } from "@/lib/lenis-scroll";
@@ -78,15 +77,12 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="relative z-10 flex translate-y-8 items-center justify-center px-6 text-center sm:translate-y-10">
+      <div className="relative z-10 flex min-h-0 items-center justify-center px-4 sm:px-6 md:px-8">
         <div
-          className="hero-copy-shadow w-full max-w-3xl"
+          className="hero-copy-shadow w-full"
           style={{ opacity: fade, transform: `translate3d(0, ${offset * -0.06}px, 0)` }}
         >
-          <h1 className="hero-logo-shadow flex justify-center">
-            <SiteLogo className="items-center scale-110 sm:scale-125" />
-          </h1>
-          <HeroTagline className="mt-6 max-w-xl leading-relaxed" />
+          <HeroTagline />
         </div>
       </div>
 

@@ -196,6 +196,17 @@
   filter: var(--hero-logo-shadow);
 }
 
+.hero-wordmark {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  font-size: clamp(5rem, 24vw, 15.5rem);
+  line-height: 0.82;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  filter: var(--hero-logo-shadow);
+}
+
 @utility hero-copy-shadow {
   &,
   & * {
