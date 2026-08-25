@@ -7,7 +7,7 @@ import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
-const PLACE_QUERY = "The Cosy Chapter, 45-47 Long Street, Atherstone CV9 1AZ";
+const PLACE_QUERY = "Belaisy Hair, 41-43 Long Street, Atherstone CV9 1AY";
 const apiKey = process.env.GOOGLE_PLACES_API_KEY;
 
 if (!apiKey) {
@@ -51,7 +51,7 @@ if (!detailsRes.ok) {
 
 const details = await detailsRes.json();
 const reviews = (details.reviews ?? [])
-  .filter((review) => review.text?.text?.trim())
+  .filter((review) => review.text?.text?.trim() && (review.rating ?? 5) === 5)
   .map((review) => ({
     quote: review.text.text.trim(),
     author: review.authorAttribution?.displayName?.trim() || "Google reviewer",

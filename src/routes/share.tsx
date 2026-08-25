@@ -3,20 +3,20 @@ import { useState, type ComponentType, type FormEvent, type ReactNode } from "re
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
-  BookOpen,
   ChevronDown,
   Globe,
   Mail,
   MapPin,
   Phone,
+  Scissors,
   Send,
   Star,
+  Users,
 } from "lucide-react";
-import { mobileHero, nightMobileHero } from "@/assets";
+import { MeshBackdrop } from "@/components/MeshBackdrop";
+import { mobileHero } from "@/assets";
 import { SiteLogo } from "@/components/SiteLogo";
-import { HeroTagline } from "@/components/HeroTagline";
 import { business, fullAddress } from "@/lib/business";
-import { useHeroTime } from "@/lib/hero-time";
 import {
   NETLIFY_FORM_ENDPOINT,
   NETLIFY_FORM_NAME,
@@ -26,21 +26,11 @@ import { getRequestOrigin } from "@/lib/origin.functions";
 import { SHARE_PAGE_META } from "@/lib/sharePageMeta";
 import { cn } from "@/lib/utils";
 
-const SHARE_CARD_CLASS = "relative isolate overflow-hidden text-primary-foreground";
-
-const SHARE_CARD_OVERLAY =
-  "linear-gradient(to bottom, oklch(0.18 0.05 231 / 0.34) 0%, oklch(0.17 0.05 231 / 0.22) 42%, oklch(0.16 0.05 231 / 0.5) 100%)";
-
 const SHARE_TAB_CLASS =
-  "group flex w-full min-h-[3.25rem] items-center rounded-xl border border-ink/10 bg-paper px-5 py-3 text-base font-medium text-ink shadow-[0_2px_10px_rgba(0,0,0,0.16)] transition-colors hover:bg-[oklch(0.94_0.014_84)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brass/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:scale-[0.99]";
-
-const SHARE_TAB_ICON_CLASS = "h-5 w-5 shrink-0 text-primary";
+  "group flex w-full min-h-[3.25rem] items-center rounded-2xl border border-border bg-white px-5 py-3.5 text-sm font-medium text-foreground shadow-[var(--shadow-card)] transition-all hover:border-primary/20 hover:shadow-[var(--shadow-soft)] active:scale-[0.99]";
 
 const SHARE_FIELD_CLASS =
-  "h-11 w-full rounded-xl border border-ink/10 bg-paper px-4 text-base text-ink placeholder:text-ink/45 transition-colors focus:border-primary/30 focus:outline-none focus:ring-2 focus:ring-brass/40";
-
-const SHARE_INSET_PANEL_CLASS =
-  "overflow-hidden rounded-xl border border-ink/10 bg-paper shadow-[0_2px_10px_rgba(0,0,0,0.16)]";
+  "h-11 w-full rounded-xl border border-border bg-white px-4 text-sm text-foreground placeholder:text-muted-foreground/60 transition-colors focus:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/10";
 
 const morphTransition = { duration: 0.38, ease: [0.25, 0.1, 0.25, 1] as const };
 
@@ -48,19 +38,12 @@ const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${enco
 
 function ShareTabAnimatedArrow() {
   const reduceMotion = useReducedMotion();
-
   if (reduceMotion) {
-    return <ArrowRight className="h-5 w-5 shrink-0 text-primary/75" strokeWidth={2.5} aria-hidden />;
+    return <ArrowRight className="h-4 w-4 shrink-0 text-primary" strokeWidth={2.5} aria-hidden />;
   }
-
   return (
-    <motion.span
-      aria-hidden
-      className="flex shrink-0 items-center"
-      animate={{ x: [0, 5, 0] }}
-      transition={{ duration: 1.15, repeat: Infinity, ease: "easeInOut" }}
-    >
-      <ArrowRight className="h-5 w-5 shrink-0 text-primary/75" strokeWidth={2.5} />
+    <motion.span aria-hidden className="flex shrink-0 items-center" animate={{ x: [0, 4, 0] }} transition={{ duration: 1.15, repeat: Infinity, ease: "easeInOut" }}>
+      <ArrowRight className="h-4 w-4 shrink-0 text-primary" strokeWidth={2.5} />
     </motion.span>
   );
 }
@@ -76,18 +59,14 @@ function ShareTabContent({
 }) {
   return (
     <div className="relative flex w-full items-center self-stretch">
-      <span className="relative z-10 flex shrink-0 items-center">
-        {Icon ? (
-          <Icon className={SHARE_TAB_ICON_CLASS} strokeWidth={2.5} aria-hidden />
-        ) : (
-          <span className={SHARE_TAB_ICON_CLASS} aria-hidden />
-        )}
+      <span className="relative z-10 flex shrink-0 items-center text-primary">
+        {Icon ? <Icon className="h-4 w-4" strokeWidth={2.5} aria-hidden /> : null}
       </span>
-      <span className="pointer-events-none absolute inset-0 flex items-center justify-center px-10 text-center font-sans leading-snug tabular-nums">
+      <span className="pointer-events-none absolute inset-0 flex items-center justify-center px-10 text-center leading-snug">
         {label}
       </span>
       <span className="relative z-10 ml-auto flex shrink-0 items-center">
-        {trailing ?? <span className="h-5 w-5 shrink-0" aria-hidden />}
+        {trailing ?? <span className="h-4 w-4 shrink-0" aria-hidden />}
       </span>
     </div>
   );
@@ -101,24 +80,8 @@ type ShareLink = {
   icon?: ComponentType<{ className?: string; strokeWidth?: number }>;
 };
 
-function ShareMorphPanel({ panelKey, children }: { panelKey: string; children: ReactNode }) {
-  return (
-    <motion.div
-      key={panelKey}
-      initial={{ height: 0, opacity: 0 }}
-      animate={{ height: "auto", opacity: 1 }}
-      exit={{ height: 0, opacity: 0 }}
-      transition={morphTransition}
-      className="overflow-hidden"
-    >
-      <div>{children}</div>
-    </motion.div>
-  );
-}
-
 function ShareLinkButton({ label, href, external, animatedArrow, icon: Icon }: ShareLink) {
-  const trailing = animatedArrow ? <ShareTabAnimatedArrow /> : undefined;
-  const content = <ShareTabContent label={label} icon={Icon} trailing={trailing} />;
+  const content = <ShareTabContent label={label} icon={Icon} trailing={animatedArrow ? <ShareTabAnimatedArrow /> : undefined} />;
 
   if (external) {
     return (
@@ -143,42 +106,6 @@ function ShareLinkButton({ label, href, external, animatedArrow, icon: Icon }: S
   );
 }
 
-function ShareExpandButton({
-  label,
-  icon: Icon,
-  expanded,
-  onClick,
-}: {
-  label: string;
-  icon: ComponentType<{ className?: string; strokeWidth?: number }>;
-  expanded: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      aria-expanded={expanded}
-      onClick={onClick}
-      className={cn(
-        SHARE_TAB_CLASS,
-        "rounded-none border-0 shadow-none hover:bg-[oklch(0.94_0.014_84)]",
-      )}
-    >
-      <ShareTabContent
-        label={label}
-        icon={Icon}
-        trailing={
-          <ChevronDown
-            className={cn(SHARE_TAB_ICON_CLASS, "transition-transform duration-300", expanded && "rotate-180")}
-            strokeWidth={2.5}
-            aria-hidden
-          />
-        }
-      />
-    </button>
-  );
-}
-
 function ShareContactForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
@@ -197,8 +124,8 @@ function ShareContactForm() {
 
   if (status === "sent") {
     return (
-      <div className="border-t border-ink/10 px-5 py-4 text-center" role="status" aria-live="polite">
-        <p className="text-sm font-medium text-ink">Thank you — we&apos;ll be in touch shortly.</p>
+      <div className="border-t border-border px-5 py-4 text-center" role="status" aria-live="polite">
+        <p className="text-sm font-medium text-primary">Thank you — we&apos;ll be in touch shortly.</p>
       </div>
     );
   }
@@ -211,50 +138,20 @@ function ShareContactForm() {
       data-netlify="true"
       netlify-honeypot="bot-field"
       onSubmit={onSubmit}
-      className="space-y-2.5 border-t border-ink/10 px-5 pb-3 pt-2.5"
+      className="space-y-2.5 border-t border-border px-4 pb-4 pt-3"
     >
       <input type="hidden" name="form-name" value={NETLIFY_FORM_NAME} />
       <input type="hidden" name="subject" value="Share page enquiry" />
       <p className="hidden" aria-hidden>
-        <label>
-          Leave this empty: <input name="bot-field" />
-        </label>
+        <label>Leave this empty: <input name="bot-field" /></label>
       </p>
-
-      <input
-        name="name"
-        type="text"
-        autoComplete="name"
-        placeholder="Your name"
-        className={SHARE_FIELD_CLASS}
-      />
-      <input
-        name="email"
-        type="email"
-        autoComplete="email"
-        placeholder="you@example.com"
-        required
-        className={SHARE_FIELD_CLASS}
-      />
-      <textarea
-        name="message"
-        rows={3}
-        placeholder="Tell us what you have in mind…"
-        required
-        className={cn(SHARE_FIELD_CLASS, "h-auto min-h-[5.5rem] resize-none py-3")}
-      />
-
-      {status === "error" && (
-        <p className="text-sm text-oxblood">Something went wrong — please call {business.phoneDisplay}.</p>
-      )}
-
-      <button
-        type="submit"
-        disabled={status === "sending"}
-        className={cn(SHARE_TAB_CLASS, "min-h-[2.75rem] w-full justify-center gap-2 px-5")}
-      >
+      <input name="name" type="text" autoComplete="name" placeholder="Your name" className={SHARE_FIELD_CLASS} />
+      <input name="email" type="email" autoComplete="email" placeholder="you@example.com" required className={SHARE_FIELD_CLASS} />
+      <textarea name="message" rows={3} placeholder="Your message…" required className={cn(SHARE_FIELD_CLASS, "h-auto min-h-[5.5rem] resize-none py-3")} />
+      {status === "error" && <p className="text-sm text-destructive">Something went wrong — please call {business.phoneDisplay}.</p>}
+      <button type="submit" disabled={status === "sending"} className={cn(SHARE_TAB_CLASS, "min-h-[2.75rem] w-full justify-center gap-2 bg-primary text-primary-foreground hover:text-primary-foreground")}>
         <span>{status === "sending" ? "Sending…" : "Send message"}</span>
-        <Send className="h-4 w-4 shrink-0 text-primary" strokeWidth={2} aria-hidden />
+        <Send className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden />
       </button>
     </form>
   );
@@ -307,87 +204,69 @@ export const Route = createFileRoute("/share")({
 
 function SharePage() {
   const [contactOpen, setContactOpen] = useState(false);
-  const { isNight } = useHeroTime();
 
   return (
-    <div className="relative min-h-[100dvh] overflow-x-hidden bg-background font-sans antialiased">
-      <main
-        className={cn(
-          "relative z-10 flex min-h-[100dvh] w-full flex-col",
-          "md:mx-auto md:max-w-md md:px-6",
-          "md:pb-[max(2rem,env(safe-area-inset-bottom))] md:pt-[max(1.5rem,env(safe-area-inset-top))]",
-        )}
-      >
-        <div
-          className={cn(
-            SHARE_CARD_CLASS,
-            "flex min-h-[100dvh] w-full flex-1 flex-col p-0",
-            "md:min-h-0 md:rounded-3xl md:border md:border-primary-foreground/10 md:px-8 md:py-10",
-            "md:shadow-[0_8px_32px_-12px_rgba(0,0,0,0.45)]",
-          )}
-        >
-          <div className="pointer-events-none absolute inset-0 isolate" aria-hidden>
-            <img
-              src={mobileHero}
-              alt=""
-              className={cn(
-                "h-full w-full object-cover object-center transition-opacity duration-700 ease-in-out",
-                isNight ? "opacity-0" : "opacity-100",
-              )}
-            />
-            <img
-              src={nightMobileHero}
-              alt=""
-              className={cn(
-                "absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ease-in-out",
-                isNight ? "opacity-100" : "opacity-0",
-              )}
-            />
-            <div className="absolute inset-0" style={{ background: SHARE_CARD_OVERLAY }} />
-          </div>
-
-          <header className="relative z-10 flex flex-col items-center px-5 pt-[max(4.5rem,env(safe-area-inset-top))] text-center md:px-0 md:pt-10">
-            <SiteLogo variant="onDark" className="h-16 sm:h-[4.5rem]" />
-            <HeroTagline className="mt-5 max-w-[22rem] text-base sm:max-w-sm sm:text-lg" />
-            <nav className="mt-5 flex items-center justify-center gap-2" aria-label="Social links">
+    <div className="relative min-h-[100dvh] overflow-x-hidden font-sans antialiased">
+      <MeshBackdrop />
+      <main className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-md flex-col px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(1.5rem,env(safe-area-inset-top))] sm:px-6 md:py-8">
+        <div className="card-soft flex flex-1 flex-col overflow-hidden p-6 sm:p-8">
+          <header className="text-center">
+            <SiteLogo className="mx-auto items-center" />
+            <p className="mx-auto mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+              {business.tagline} — On Long Street, Atherstone
+            </p>
+            <nav className="mt-5 flex items-center justify-center gap-1" aria-label="Social links">
               {SOCIAL_LINKS.map(({ label, href, Icon }) => (
                 <a
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full p-2 text-primary-foreground transition-colors hover:bg-primary-foreground/10 hover:text-brass"
+                  className="rounded-full p-2.5 text-muted-foreground transition-colors hover:bg-blush hover:text-primary"
                   aria-label={label}
                 >
-                  <Icon className="h-6 w-6" />
+                  <Icon className="h-5 w-5" />
                 </a>
               ))}
             </nav>
           </header>
 
-          <nav
-            className="relative z-10 mt-8 flex w-full flex-1 flex-col gap-2.5 px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:mt-10 sm:gap-3 md:px-0 md:pb-0"
-            aria-label="Quick links"
-          >
-            <ShareLinkButton label="Visit the book bar" href="/" icon={Globe} animatedArrow />
-            <ShareLinkButton label="View the menu" href="/menu" icon={BookOpen} />
+          <nav className="mt-8 flex flex-1 flex-col gap-2.5" aria-label="Quick links">
+            <ShareLinkButton label="Visit the salon" href="/" icon={Globe} animatedArrow />
+            <ShareLinkButton label="View treatments" href="/menu" icon={Scissors} />
             <ShareLinkButton label={`Call ${business.phoneDisplay}`} href={business.phoneHref} icon={Phone} />
             <ShareLinkButton label="Get directions" href={directionsUrl} external icon={MapPin} />
-            <ShareLinkButton label="Browse the shelves" href="/#books" icon={BookOpen} />
-            <ShareLinkButton label="Google reviews · 5.0" href={business.google} external icon={Star} />
+            <ShareLinkButton label="Meet the team" href="/#team" icon={Users} />
+            <ShareLinkButton label="Salon policies" href="/policies" icon={Scissors} />
+            <ShareLinkButton label="Google reviews" href={business.google} external icon={Star} />
 
-            <div className={SHARE_INSET_PANEL_CLASS}>
-              <ShareExpandButton
-                label="Send a message"
-                icon={Mail}
-                expanded={contactOpen}
+            <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-[var(--shadow-card)]">
+              <button
+                type="button"
+                aria-expanded={contactOpen}
                 onClick={() => setContactOpen((open) => !open)}
-              />
+                className={cn(SHARE_TAB_CLASS, "rounded-none border-0 shadow-none")}
+              >
+                <ShareTabContent
+                  label="Send a message"
+                  icon={Mail}
+                  trailing={
+                    <ChevronDown className={cn("h-4 w-4 text-primary transition-transform", contactOpen && "rotate-180")} strokeWidth={2.5} aria-hidden />
+                  }
+                />
+              </button>
               <AnimatePresence initial={false}>
                 {contactOpen ? (
-                  <ShareMorphPanel panelKey="contact">
+                  <motion.div
+                    key="contact"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={morphTransition}
+                    className="overflow-hidden"
+                  >
                     <ShareContactForm />
-                  </ShareMorphPanel>
+                  </motion.div>
                 ) : null}
               </AnimatePresence>
             </div>

@@ -1,32 +1,23 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { SiteLogo } from "@/components/SiteLogo";
 import { HeroTagline } from "@/components/HeroTagline";
-import {
-  heroShopfront,
-  mobileHero,
-  nightHeroDesktop,
-  nightMobileHero,
-} from "@/assets";
-import { useHeroTime } from "@/lib/hero-time";
+import { heroShopfront } from "@/assets";
 import { subscribeLenisScroll } from "@/lib/lenis-scroll";
 import { cn } from "@/lib/utils";
 
 const MARQUEE_WORDS = [
-  "Books",
-  "Coffee",
-  "Wine",
-  "Sharing boards",
-  "Book club",
-  "Tasting nights",
-  "Cosy corners",
+  "Cuts and Colour",
+  "Balayage",
+  "Blow Drys",
+  "Nails and Beauty",
+  "Treatments",
+  "Bridal Hair",
+  "The Lounge",
 ] as const;
 
 function MarqueeSeparator() {
   return (
-    <span
-      className="shrink-0 font-display text-xl leading-none text-brass sm:text-2xl"
-      aria-hidden="true"
-    >
+    <span className="shrink-0 font-display text-xl leading-none text-primary/40 sm:text-2xl" aria-hidden="true">
       ·
     </span>
   );
@@ -40,7 +31,7 @@ function HeroMarqueeTrack() {
       {loop.map((word, index) => (
         <Fragment key={`${word}-${index}`}>
           {index > 0 ? <MarqueeSeparator /> : null}
-          <span className="shrink-0 font-display text-xl leading-none text-white sm:text-2xl">
+          <span className="shrink-0 font-display text-xl leading-none text-foreground/85 sm:text-2xl">
             {word}
           </span>
         </Fragment>
@@ -50,13 +41,11 @@ function HeroMarqueeTrack() {
 }
 
 export function Hero() {
-  const { isNight } = useHeroTime();
   const [offset, setOffset] = useState(0);
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
     return subscribeLenisScroll(setOffset);
   }, []);
 
@@ -73,54 +62,39 @@ export function Hero() {
           className="absolute inset-x-0 -top-[12%] h-[124%] will-change-transform"
           style={{ transform: `translate3d(0, ${offset * 0.28}px, 0) scale(1.04)` }}
         >
-          <picture
-            className={cn(
-              "absolute inset-0 transition-opacity duration-700 ease-in-out",
-              isNight ? "opacity-0" : "opacity-100",
-            )}
-          >
-            <source media="(min-width: 768px)" srcSet={heroShopfront} />
-            <img
-              src={mobileHero}
-              alt=""
-              aria-hidden="true"
-              className="h-full w-full object-cover object-center"
-            />
-          </picture>
-          <picture
-            className={cn(
-              "absolute inset-0 transition-opacity duration-700 ease-in-out",
-              isNight ? "opacity-100" : "opacity-0",
-            )}
-          >
-            <source media="(min-width: 768px)" srcSet={nightHeroDesktop} />
-            <img
-              src={nightMobileHero}
-              alt="The Cosy Chapter — book bar, coffee and wine on Long Street, Atherstone"
-              className="h-full w-full object-cover object-center"
-              fetchPriority="high"
-            />
-          </picture>
-          <div className="absolute inset-0" style={{ background: "var(--gradient-veil)" }} />
-          <div className="absolute inset-0 bg-primary/12" />
-          <div className="absolute inset-0" style={{ background: "var(--hero-vignette)" }} />
+          <img
+            src={heroShopfront}
+            alt="Belaisy Hair and Beauty Lounge on Long Street, Atherstone"
+            width={1920}
+            height={1440}
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover object-[center_22%] md:object-center"
+            fetchPriority="high"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[oklch(0.96_0.03_78/0.22)] via-[oklch(0.97_0.025_82/0.12)] to-[oklch(0.95_0.04_75/0.38)] md:from-[oklch(0.96_0.03_78/0.35)] md:via-[oklch(0.97_0.025_82/0.2)] md:to-[oklch(0.95_0.04_75/0.55)]" />
+          <div className="absolute inset-0 hero-sepia-wash opacity-80 md:opacity-100" />
+          <div className="absolute inset-0 opacity-80 md:opacity-100" style={{ background: "var(--hero-veil)" }} />
+          <div className="absolute inset-0 opacity-70 md:opacity-100" style={{ background: "var(--hero-vignette)" }} />
         </div>
       </div>
 
-      <div className="relative z-10 flex translate-y-10 items-center justify-center px-6 text-center sm:translate-y-11">
+      <div className="relative z-10 flex translate-y-8 items-center justify-center px-6 text-center sm:translate-y-10">
         <div
           className="hero-copy-shadow w-full max-w-3xl"
           style={{ opacity: fade, transform: `translate3d(0, ${offset * -0.06}px, 0)` }}
         >
           <h1 className="hero-logo-shadow flex justify-center">
-            <SiteLogo className="h-24 w-auto sm:h-32 lg:h-40" />
+            <SiteLogo className="items-center scale-110 sm:scale-125" />
           </h1>
           <HeroTagline className="mt-6 max-w-xl leading-relaxed" />
         </div>
       </div>
 
       <div
-        className="hero-copy-shadow relative z-10 overflow-hidden py-5 sm:py-6"
+        className={cn(
+          "hero-copy-shadow relative z-10 overflow-hidden border-t border-foreground/10 py-5 sm:py-6",
+          "bg-gradient-to-t from-[oklch(0.96_0.03_78/0.55)] to-transparent backdrop-blur-[2px]",
+        )}
         aria-label="Highlights"
       >
         <div className="marquee-track flex w-max items-center gap-8 whitespace-nowrap sm:gap-12">

@@ -52,7 +52,10 @@ export function Reveal({
 
   return (
     <Tag ref={ref as never} className={className}>
-      <div className={cn("reveal", stateClass)} style={{ transitionDelay: `${delay}ms` }}>
+      <div
+        className={cn("reveal", className.includes("h-full") && "h-full", stateClass)}
+        style={{ transitionDelay: `${delay}ms` }}
+      >
         {children}
       </div>
     </Tag>

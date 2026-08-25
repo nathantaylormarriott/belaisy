@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { business } from "@/lib/business";
 import { isNightAtLocation, msUntilNextDayNightChange } from "@/lib/solar-time";
 
-const STORAGE_KEY = "cosy-chapter-hero-mode";
+const STORAGE_KEY = "belaisy-hero-mode";
 
 type HeroMode = "auto" | "day" | "night";
 

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MenuRouteImport } from './routes/menu'
+import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as ShareRouteImport } from './routes/share'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const MenuRoute = MenuRouteImport.update({
   path: '/menu',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PoliciesRoute = PoliciesRouteImport.update({
+  id: '/policies',
+  path: '/policies',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShareRoute = ShareRouteImport.update({
   id: '/share',
   path: '/share',
@@ -32,30 +38,34 @@ const ShareRoute = ShareRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/menu': typeof MenuRoute
+  '/policies': typeof PoliciesRoute
   '/share': typeof ShareRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/menu': typeof MenuRoute
+  '/policies': typeof PoliciesRoute
   '/share': typeof ShareRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/menu': typeof MenuRoute
+  '/policies': typeof PoliciesRoute
   '/share': typeof ShareRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/menu' | '/share'
+  fullPaths: '/' | '/menu' | '/policies' | '/share'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/menu' | '/share'
-  id: '__root__' | '/' | '/menu' | '/share'
+  to: '/' | '/menu' | '/policies' | '/share'
+  id: '__root__' | '/' | '/menu' | '/policies' | '/share'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   MenuRoute: typeof MenuRoute
+  PoliciesRoute: typeof PoliciesRoute
   ShareRoute: typeof ShareRoute
 }
 
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MenuRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/policies': {
+      id: '/policies'
+      path: '/policies'
+      fullPath: '/policies'
+      preLoaderRoute: typeof PoliciesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/share': {
       id: '/share'
       path: '/share'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   MenuRoute: MenuRoute,
+  PoliciesRoute: PoliciesRoute,
   ShareRoute: ShareRoute,
 }
 export const routeTree = rootRouteImport

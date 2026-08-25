@@ -2,26 +2,29 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { SiteNav } from "@/components/SiteNav";
 import { Hero } from "@/components/Hero";
+import { MeshBackdrop } from "@/components/MeshBackdrop";
 import { Reveal } from "@/components/Reveal";
 import { ContactForm } from "@/components/ContactForm";
 import { ReviewsCarousel } from "@/components/ReviewsCarousel";
 import { GoogleMapEmbed } from "@/components/GoogleMapEmbed";
-import { SiteFooter } from "@/components/SiteFooter";
+import { SiteRevealPage } from "@/components/SiteRevealPage";
+import { ServicesBentoGrid } from "@/components/ServicesBentoGrid";
+import { TeamScrollRail } from "@/components/TeamScrollRail";
 import { getRequestOrigin } from "@/lib/origin.functions";
 import { fetchGoogleReviews } from "@/lib/google-reviews.functions";
 import { business, fullAddress } from "@/lib/business";
 import {
   heroShopfront,
-  bookshelves,
-  wineTasting,
-  breakfast,
-  sharingBoard,
-  espressoMartini,
+  salonInterior,
+  beautyTreatment,
+  hairColour,
 } from "@/assets";
+import { teamMembers } from "@/data/team";
+import { homeTreatmentPreview } from "@/data/treatments";
 
-const title = "The Cosy Chapter | Book Bar, Coffee & Wine in Atherstone";
+const title = "Belaisy Hair | Hair and Beauty Lounge in Atherstone";
 const description =
-  "A boutique book, coffee and wine bar on Long Street, Atherstone. Cosy reading corners, curated sharing boards, espresso martinis and shelves worth losing an afternoon in.";
+  "Belaisy Hair and Beauty Lounge on Long Street, Atherstone. Expert cuts, colour, treatments, nails and more in a relaxed salon setting.";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -31,7 +34,7 @@ export const Route = createFileRoute("/")({
   head: ({ loaderData }) => {
     const ogImage = `${loaderData?.origin ?? ""}${heroShopfront}`;
     const reviews = loaderData?.reviews ?? [];
-    const reviewCount = reviews.length > 0 ? String(reviews.length) : "4";
+    const reviewCount = reviews.length > 0 ? String(reviews.length) : undefined;
     return {
       meta: [
         { title },
@@ -52,7 +55,7 @@ export const Route = createFileRoute("/")({
           type: "application/ld+json",
           children: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": ["CafeOrCoffeeShop", "BarOrPub", "BookStore"],
+            "@type": ["HairSalon", "BeautySalon"],
             name: business.name,
             description,
             image: ogImage,
@@ -71,15 +74,18 @@ export const Route = createFileRoute("/")({
               latitude: business.lat,
               longitude: business.lng,
             },
-            servesCuisine: ["Coffee", "Wine", "Small plates"],
             priceRange: "££",
             sameAs: [business.facebook, business.instagram],
             areaServed: ["Atherstone", "Nuneaton", "Tamworth", "North Warwickshire"],
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: "5",
-              reviewCount,
-            },
+            ...(reviewCount
+              ? {
+                  aggregateRating: {
+                    "@type": "AggregateRating",
+                    ratingValue: "5",
+                    reviewCount,
+                  },
+                }
+              : {}),
             ...(reviews.length > 0
               ? {
                   review: reviews.map((r) => ({
@@ -94,12 +100,14 @@ export const Route = createFileRoute("/")({
                   })),
                 }
               : {}),
-            openingHoursSpecification: business.hours.map((h) => ({
-              "@type": "OpeningHoursSpecification",
-              dayOfWeek: h.schema[0],
-              opens: h.schema[1],
-              closes: h.schema[2],
-            })),
+            openingHoursSpecification: business.hours
+              .filter((h) => h.open !== "Closed")
+              .map((h) => ({
+                "@type": "OpeningHoursSpecification",
+                dayOfWeek: h.schema[0],
+                opens: h.schema[1],
+                closes: h.schema[2],
+              })),
           }),
         },
       ],
@@ -108,248 +116,196 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const chapters = [
-  {
-    no: "I",
-    title: "The Shelves",
-    copy: "Wall-to-wall fiction, crime, romance and the odd coffee-table beauty — browse with a flat white in hand and leave with your next favourite.",
-    image: bookshelves,
-    alt: "Floor-to-ceiling bookshelves filled with fiction inside The Cosy Chapter",
-  },
-  {
-    no: "II",
-    title: "The Kitchen",
-    copy: "Little breakfasts, warm pastries and generous sharing boards of charcuterie, cheese, hummus and chutney — made to linger over.",
-    image: sharingBoard,
-    alt: "Sharing board with charcuterie, cheeses, olives, hummus and toasted bread by candlelight",
-  },
-  {
-    no: "III",
-    title: "The Bar",
-    copy: "Small-producer wines by the glass, espresso martinis after dark and tasting evenings that turn strangers into a table of friends.",
-    image: espressoMartini,
-    alt: "Espresso martini on a dark wooden table with scattered coffee beans",
-  },
-];
-
 function Home() {
   const { reviews } = Route.useLoaderData();
+
   return (
-    <div className="bg-background">
+    <div>
       <SmoothScroll />
       <SiteNav />
-      <main className="relative z-10 bg-background">
+      <SiteRevealPage>
         <Hero />
 
-        {/* Welcome — story & contact */}
-        <section id="story" className="py-24 sm:py-32">
-          <div className="container-tight grid gap-14 lg:grid-cols-12 lg:items-start">
-            <Reveal className="lg:col-span-5">
-              <p className="eyebrow">Welcome</p>
-              <h2 className="mt-5 text-4xl leading-tight sm:text-5xl">
-                A bookshop that pours,
-                <span className="block italic text-primary/70">a wine bar that reads.</span>
+        <div className="relative">
+          <MeshBackdrop />
+          <main className="relative">
+
+        <section id="story" className="py-20 sm:py-28">
+          <div className="container-tight grid gap-14 lg:grid-cols-2 lg:items-start lg:gap-20">
+            <Reveal>
+              <p className="section-label">About us</p>
+              <h2 className="mt-5 text-4xl sm:text-5xl">
+                A lighter way to feel{" "}
+                <span className="text-primary italic">looked after</span>
               </h2>
-              <p className="mt-8 text-lg font-light leading-relaxed text-muted-foreground">
-                Behind the deep navy shopfront on Long Street you'll find something Atherstone
-                hasn't had before: a proper boutique book bar. Wing-back chairs and low lamps for
-                the morning readers, copper-topped tables and candles for the evening crowd, and
-                shelves that quietly invite you to stay one chapter longer.
-              </p>
-              <p className="mt-6 text-lg font-light leading-relaxed text-muted-foreground">
-                Coffee is served from eight. Wine follows in the afternoon. In between there are
-                pastries, boards, book clubs and tasting evenings — all under the same roof, all
-                unhurried.
-              </p>
+              <div className="mt-8 space-y-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
+                <p>
+                  Belaisy Hair and Beauty Lounge is a welcoming salon on Long Street,
+                  Atherstone — somewhere to switch off, feel cared for, and leave
+                  feeling like the best version of yourself.
+                </p>
+                <p>
+                  From precision cuts and colour to nails, aesthetics and wellness,
+                  our team of talented stylists and independent professionals make
+                  every visit feel unhurried and personal.
+                </p>
+              </div>
             </Reveal>
 
-            <div className="flex flex-col gap-12 lg:col-span-6 lg:col-start-7">
-              <Reveal delay={120}>
-                <div id="contact" className="border-b border-border pb-8">
-                  <p className="font-display text-2xl leading-snug text-primary sm:text-3xl">
-                    Book a table, or a whole chapter
-                  </p>
-                  <p className="mt-4 text-base font-light leading-relaxed text-muted-foreground">
-                    Group bookings, private hire, book clubs and wine tasting evenings — tell us what
-                    you're planning and we'll make room for it.
-                  </p>
+            <Reveal delay={120}>
+              <div id="contact">
+                <p className="section-label">Get in touch</p>
+                <h3 className="mt-4 font-display text-2xl sm:text-3xl">Book your appointment</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  Call, message or DM us on Instagram — we&apos;ll find a time that works.
+                </p>
+                <div className="mt-6">
+                  <ContactForm />
                 </div>
-              </Reveal>
-              <Reveal delay={180}>
-                <ContactForm />
-              </Reveal>
-            </div>
+              </div>
+            </Reveal>
           </div>
         </section>
 
-        {/* Chapters — sticky scroll cards */}
-        <section id="books" className="bg-primary py-24 text-primary-foreground sm:py-32">
+        <section id="services" className="py-20 sm:py-28">
           <div className="container-tight">
-            <Reveal className="max-w-2xl">
-              <p className="eyebrow">What's inside</p>
-              <h2 className="mt-5 text-4xl leading-tight sm:text-5xl">Three chapters, one room</h2>
+            <Reveal className="mx-auto max-w-2xl text-center">
+              <p className="section-label justify-center">What we offer</p>
+              <h2 className="mt-5 text-4xl sm:text-5xl">Hair, beauty and beyond</h2>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                Salon cuts and colour, Leah&apos;s extensions, Amber&apos;s nails, permanent jewellery,
+                massage and medical aesthetics — tap a tile to view prices.
+              </p>
             </Reveal>
 
-            <div className="mt-16 space-y-8">
-              {chapters.map((c, i) => (
-                <Reveal
-                  key={c.no}
-                  className="sticky top-24 overflow-hidden bg-primary"
-                  delay={i * 80}
-                >
-                  <div className="grid gap-0 md:grid-cols-2">
-                    <div className="content-image relative aspect-4/3 md:aspect-auto md:min-h-[420px]">
-                      <img
-                        src={c.image}
-                        alt={c.alt}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-[1600ms] hover:scale-105"
-                      />
-                    </div>
-                    <div className="flex flex-col justify-center gap-5 p-8 sm:p-12">
-                      <span className="font-display text-5xl text-brass/60">{c.no}</span>
-                      <h3 className="text-3xl sm:text-4xl">{c.title}</h3>
-                      <div className="rule-brass w-24" />
-                      <p className="text-base font-light leading-relaxed text-primary-foreground/75">
-                        {c.copy}
-                      </p>
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
+            <ServicesBentoGrid items={homeTreatmentPreview} />
           </div>
         </section>
 
-        {/* Kitchen & bar gallery */}
-        <section id="kitchen" className="py-24 sm:py-32">
+        <section id="team" className="pb-8 pt-12 sm:pb-10 sm:pt-16">
+          <TeamScrollRail members={teamMembers} />
+        </section>
+
+        <section id="gallery" className="py-20 sm:py-28">
           <div className="container-tight">
             <Reveal className="flex flex-wrap items-end justify-between gap-6">
-              <div className="max-w-xl">
-                <p className="eyebrow">Kitchen &amp; bar</p>
-                <h2 className="mt-5 text-4xl leading-tight sm:text-5xl">
-                  Little breakfasts, long evenings
-                </h2>
+              <div className="max-w-lg">
+                <p className="section-label">Inside the lounge</p>
+                <h2 className="mt-5 text-4xl sm:text-5xl">Bright, calm and welcoming</h2>
               </div>
-              <div className="flex max-w-sm flex-col gap-4">
-                <p className="text-sm font-light leading-relaxed text-muted-foreground">
-                  Everything is made for sharing — pastries and toast at the copper tables in the
-                  morning sun, boards and bottles once the lamps come on.
-                </p>
-                <Link
-                  to="/menu"
-                  className="btn-classic self-start border border-primary/30 text-primary transition-colors duration-500 hover:bg-primary hover:text-primary-foreground"
-                >
-                  View full menu
-                </Link>
-              </div>
+            <Link to="/menu" className="btn-ghost">
+              View treatments
+            </Link>
             </Reveal>
 
-            <div className="mt-14 grid gap-4 md:grid-cols-3">
-              {[
-                { src: breakfast, alt: "Little breakfast of toast, pastries and coffee on a copper café table", span: "md:col-span-2 aspect-16/10" },
-                { src: espressoMartini, alt: "Espresso martini served at the bar", span: "aspect-4/5" },
-                { src: wineTasting, alt: "Guests at a wine tasting evening in the bookshop's back room", span: "aspect-4/5" },
-                { src: sharingBoard, alt: "Charcuterie and cheese sharing board", span: "md:col-span-2 aspect-16/10" },
-              ].map((img, i) => (
-                <Reveal key={img.src} delay={i * 90} className={`content-image ${img.span}`}>
-                  <img
-                    src={img.src}
-                    alt={img.alt}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-[1600ms] hover:scale-105"
-                  />
-                </Reveal>
-              ))}
+            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-12">
+              <Reveal className="content-image lg:col-span-7 lg:row-span-2">
+                <img
+                  src={salonInterior}
+                  alt="Bright, welcoming salon interior at Belaisy Hair"
+                  loading="lazy"
+                  className="aspect-[4/3] h-full w-full object-cover lg:aspect-auto lg:min-h-full"
+                />
+              </Reveal>
+              <Reveal delay={60} className="content-image lg:col-span-5">
+                <img src={hairColour} alt="Hair colour being applied" loading="lazy" className="aspect-[4/3] h-full w-full object-cover" />
+              </Reveal>
+              <Reveal delay={120} className="content-image lg:col-span-5">
+                <img src={beautyTreatment} alt="Beauty treatment in a relaxed setting" loading="lazy" className="aspect-[4/3] h-full w-full object-cover" />
+              </Reveal>
             </div>
           </div>
         </section>
 
-        {/* Reviews */}
-        <section className="overflow-hidden border-y border-border bg-secondary py-24 sm:py-28">
+        <section className="overflow-hidden py-20 sm:py-24">
           <div className="container-tight text-center">
             <Reveal>
-              <p className="eyebrow">Guest book</p>
-              <div className="mt-5 flex items-center justify-center gap-1.5 text-brass" aria-label="Rated 5.0 out of 5 on Google">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <svg key={i} width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="m12 2 2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z" />
-                  </svg>
-                ))}
-              </div>
-              <h2 className="mt-6 text-4xl leading-tight sm:text-5xl">
-                Rated 5.0 by our readers
-              </h2>
+              <p className="section-label justify-center">Client love</p>
+              {reviews.length > 0 ? (
+                <>
+                  <div className="mt-4 flex items-center justify-center gap-1 text-accent" aria-label="Rated 5 out of 5 on Google">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="m12 2 2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <h2 className="mt-5 text-4xl sm:text-5xl">What our clients say</h2>
+                </>
+              ) : (
+                <>
+                  <h2 className="mt-5 text-4xl sm:text-5xl">Loved by our clients</h2>
+                  <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
+                    Follow{" "}
+                    <a href={business.instagram} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                      @belaisylounge
+                    </a>{" "}
+                    for the latest work, or leave us a Google review after your visit.
+                  </p>
+                </>
+              )}
             </Reveal>
-
-            {reviews.length === 0 ? (
-              <Reveal delay={120}>
-                <p className="mx-auto mt-6 max-w-lg text-base font-light leading-relaxed text-muted-foreground">
-                  Every review left on our Google Business Profile so far is a five-star one.
-                  Read them for yourself — or add your own after your visit.
-                </p>
-              </Reveal>
-            ) : null}
           </div>
-
           {reviews.length > 0 ? <ReviewsCarousel reviews={reviews} /> : null}
         </section>
 
-        {/* Visit — NAP, hours, map */}
-        <section id="visit" className="py-24 sm:py-32">
-          <div className="container-tight grid gap-14 lg:grid-cols-12 lg:items-stretch">
-            <Reveal className="lg:col-span-5">
-              <p className="eyebrow">Find us</p>
-              <h2 className="mt-5 text-4xl leading-tight sm:text-5xl">Visit The Cosy Chapter</h2>
+        <section id="visit" className="py-20 sm:py-28">
+          <div className="container-tight">
+            <Reveal>
+              <p className="section-label">Find us</p>
+              <h2 className="mt-5 text-4xl sm:text-5xl">Visit Belaisy</h2>
+            </Reveal>
 
-              <address className="mt-10 not-italic">
-                <p className="font-display text-2xl text-primary">{business.name}</p>
-                <p className="mt-2 text-base font-light text-muted-foreground">
+            <div className="mt-8 grid gap-8 lg:grid-cols-2 lg:items-stretch lg:gap-10 [&>*]:h-full">
+              <Reveal className="h-full min-h-[360px] sm:min-h-[420px]">
+                <div className="card-soft h-full p-6 sm:p-8">
+                <p className="font-display text-xl text-foreground">{business.name}</p>
+                <address className="mt-3 not-italic text-sm leading-relaxed text-muted-foreground">
                   {business.street}
                   <br />
                   {business.town}, {business.county}
                   <br />
                   {business.postcode}
-                  <br />
-                  United Kingdom
-                </p>
-              </address>
+                </address>
 
-              <dl className="mt-10 border-t border-border">
-                {business.hours.map((h) => (
-                  <div
-                    key={h.day}
-                    className="flex items-baseline justify-between border-b border-border py-3 text-sm font-light"
+                <dl className="mt-6 space-y-2">
+                  {business.hours.map((h) => (
+                    <div key={h.day} className="flex justify-between gap-4 text-sm">
+                      <dt className="text-muted-foreground">{h.day}</dt>
+                      <dd className="font-medium text-foreground">
+                        {h.open === "Closed" ? "Closed" : `${h.open} – ${h.close}`}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${business.name}, ${fullAddress}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-ghost"
                   >
-                    <dt className="uppercase tracking-[0.16em] text-muted-foreground text-[0.7rem]">
-                      {h.day}
-                    </dt>
-                    <dd className="font-numeric">
-                      {h.open} – {h.close}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
+                    Get directions
+                  </a>
+                  <a href={business.phoneHref} className="btn-primary">
+                    Call to book
+                  </a>
+                </div>
+                </div>
+              </Reveal>
 
-              <div className="mt-8 flex flex-wrap gap-4">
-                <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${business.name}, ${fullAddress}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-classic border border-primary/30 text-primary transition-colors duration-500 hover:bg-primary hover:text-primary-foreground"
-                >
-                  Get directions
-                </a>
-              </div>
-            </Reveal>
-
-            <div className="lg:col-span-7">
-              <GoogleMapEmbed className="h-[420px] w-full lg:h-full lg:min-h-[560px]" />
+              <Reveal delay={100} className="h-full min-h-[360px] sm:min-h-[420px]">
+                <div className="card-soft h-full overflow-hidden p-0">
+                  <GoogleMapEmbed className="h-full min-h-[360px] w-full rounded-none border-0 sm:min-h-[420px]" />
+                </div>
+              </Reveal>
             </div>
           </div>
         </section>
-      </main>
-      <SiteFooter />
+          </main>
+        </div>
+      </SiteRevealPage>
     </div>
   );
 }

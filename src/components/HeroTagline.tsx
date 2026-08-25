@@ -9,7 +9,7 @@ export function HeroTagline({ className }: HeroTaglineProps) {
   return (
     <p
       className={cn(
-        "mx-auto font-medium leading-snug text-white",
+        "mx-auto font-display leading-snug text-foreground",
         "text-lg sm:text-xl lg:text-2xl",
         className,
       )}

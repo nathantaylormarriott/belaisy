@@ -45,7 +45,7 @@ export function GoogleMapEmbed({ className }: GoogleMapEmbedProps) {
         />
       ) : (
         <div
-          className="flex h-full min-h-[420px] items-center justify-center text-sm font-light text-muted-foreground"
+          className="flex h-full min-h-[420px] items-center justify-center text-sm text-muted-foreground"
           aria-hidden
         />
       )}

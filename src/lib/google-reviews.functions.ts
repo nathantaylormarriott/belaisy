@@ -9,7 +9,7 @@ export type GoogleReview = {
   publishedAt?: string;
 };
 
-const PLACE_QUERY = "The Cosy Chapter, 45-47 Long Street, Atherstone CV9 1AZ";
+const PLACE_QUERY = "Belaisy Hair, 41-43 Long Street, Atherstone CV9 1AY";
 
 async function fetchFromPlacesApi(): Promise<GoogleReview[]> {
   const apiKey = process.env.GOOGLE_PLACES_API_KEY;
@@ -52,7 +52,7 @@ async function fetchFromPlacesApi(): Promise<GoogleReview[]> {
   };
 
   return (details.reviews ?? [])
-    .filter((review) => review.text?.text?.trim())
+    .filter((review) => review.text?.text?.trim() && (review.rating ?? 5) === 5)
     .map((review) => ({
       quote: review.text!.text!.trim(),
       author: review.authorAttribution?.displayName?.trim() || "Google reviewer",
@@ -64,13 +64,16 @@ async function fetchFromPlacesApi(): Promise<GoogleReview[]> {
 
 export const fetchGoogleReviews = createServerFn({ method: "GET" }).handler(
   async (): Promise<GoogleReview[]> => {
+    const fiveStarStatic = (staticReviews as GoogleReview[]).filter((review) => review.rating === 5);
+    if (fiveStarStatic.length > 0) return fiveStarStatic;
+
     try {
       const live = await fetchFromPlacesApi();
       if (live.length > 0) return live;
     } catch {
-      /* fall through to cached reviews */
+      /* fall through */
     }
 
-    return staticReviews as GoogleReview[];
+    return [];
   },
 );
