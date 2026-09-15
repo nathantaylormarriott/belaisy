@@ -132,25 +132,27 @@ function Home() {
 
         <section id="story" className="py-20 sm:py-28">
           <div className="container-tight grid gap-14 lg:grid-cols-2 lg:items-start lg:gap-20">
-            <Reveal>
-              <p className="section-label">About us</p>
-              <h2 className="mt-5 text-4xl sm:text-5xl">
-                A lighter way to feel{" "}
-                <span className="text-primary italic">looked after</span>
-              </h2>
-              <div className="mt-8 space-y-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
-                <p>
-                  Belaisy Hair and Beauty Lounge is a welcoming salon on Long Street,
-                  Atherstone — somewhere to switch off, feel cared for, and leave
-                  feeling like the best version of yourself.
-                </p>
-                <p>
-                  From precision cuts and colour to nails, aesthetics and wellness,
-                  our team of talented stylists and independent professionals make
-                  every visit feel unhurried and personal.
-                </p>
-              </div>
-            </Reveal>
+            <div>
+              <Reveal>
+                <h2 className="text-4xl sm:text-5xl">
+                  A lighter way to feel looked after
+                </h2>
+              </Reveal>
+              <Reveal delay={100}>
+                <div className="mt-8 space-y-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
+                  <p>
+                    Belaisy Hair and Beauty Lounge is a welcoming salon on Long Street,
+                    Atherstone — somewhere to switch off, feel cared for, and leave
+                    feeling like the best version of yourself.
+                  </p>
+                  <p>
+                    From precision cuts and colour to nails, aesthetics and wellness,
+                    our team of talented stylists and independent professionals make
+                    every visit feel unhurried and personal.
+                  </p>
+                </div>
+              </Reveal>
+            </div>
 
             <Reveal delay={120}>
               <div id="contact">
@@ -190,8 +192,7 @@ function Home() {
           <div className="container-tight">
             <Reveal className="flex flex-wrap items-end justify-between gap-6">
               <div className="max-w-lg">
-                <p className="section-label">Inside the lounge</p>
-                <h2 className="mt-5 text-4xl sm:text-5xl">Bright, calm and welcoming</h2>
+                <h2 className="text-4xl sm:text-5xl">Step inside, bright calm and welcoming</h2>
               </div>
             <Link to="/menu" className="btn-ghost">
               View treatments
@@ -220,7 +221,6 @@ function Home() {
         <section className="overflow-hidden py-20 sm:py-24">
           <div className="container-tight text-center">
             <Reveal>
-              <p className="section-label justify-center">Client love</p>
               {reviews.length > 0 ? (
                 <>
                   <div className="mt-4 flex items-center justify-center gap-1 text-accent" aria-label="Rated 5 out of 5 on Google">

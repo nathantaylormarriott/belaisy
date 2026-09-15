@@ -10,8 +10,7 @@ type TeamScrollRailProps = {
 function TeamHeader() {
   return (
     <div className="container-tight mx-auto max-w-2xl pb-8 pt-2 text-center sm:pb-10">
-      <p className="section-label justify-center">Meet the team</p>
-      <h2 className="mt-5 text-4xl sm:text-5xl">The faces behind the lounge</h2>
+      <h2 className="text-4xl sm:text-5xl">The faces behind the lounge</h2>
       <p className="mt-4 text-base leading-relaxed text-muted-foreground">
         Stylists, beauty professionals and wellness specialists — all under one roof.
       </p>

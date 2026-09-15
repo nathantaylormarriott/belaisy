@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useEffect, useRef, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { SiteLogo } from "@/components/SiteLogo";
@@ -17,6 +17,46 @@ const footerLinks = [
   { label: "Visit", href: "/#visit" },
   { label: "Contact", href: "/#contact" },
 ] as const;
+
+function FooterFitWordmark({ children }: { children: ReactNode }) {
+  const containerRef = useRef<HTMLSpanElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    const text = textRef.current;
+    if (!container || !text) return;
+
+    const fit = () => {
+      const width = container.clientWidth;
+      if (!width) return;
+
+      const root = parseFloat(getComputedStyle(document.documentElement).fontSize);
+      const min = root * 3.5;
+      const max = root * 17.5;
+
+      text.style.fontSize = `${max}px`;
+      const scale = width / text.scrollWidth;
+      const size = Math.min(max, Math.max(min, max * scale));
+      text.style.fontSize = `${size}px`;
+    };
+
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(container);
+    void document.fonts?.ready.then(fit);
+
+    return () => observer.disconnect();
+  }, [children]);
+
+  return (
+    <span ref={containerRef} className="footer-wordmark-fit">
+      <span ref={textRef} className="footer-wordmark font-display">
+        {children}
+      </span>
+    </span>
+  );
+}
 
 export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_props, ref) {
   return (
@@ -110,10 +150,10 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_props, re
         <Link
           to="/"
           hash="top"
-          className="footer-wordmark-link container-tight block"
+          className="footer-wordmark-link"
           aria-label={`${business.name} home`}
         >
-          <span className="footer-wordmark font-display">{business.shortName}</span>
+          <FooterFitWordmark>{business.shortName}</FooterFitWordmark>
         </Link>
       </div>
     </footer>
