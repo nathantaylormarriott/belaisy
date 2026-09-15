@@ -43,8 +43,7 @@ function TreatmentsPage() {
         <section className="pb-10 sm:pb-14">
           <div className="container-tight max-w-3xl text-center">
             <Reveal>
-              <p className="section-label justify-center">Treatments and pricing</p>
-              <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl">Price list</h1>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl">Price list</h1>
               <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
                 Belaisy Lounge brings together independent hair, beauty and wellness
                 professionals under one roof. Use the guide below to find your therapist,

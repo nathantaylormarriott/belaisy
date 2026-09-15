@@ -134,7 +134,7 @@ function BentoCard({
           >
             {item.summary}
           </p>
-          <span className="mt-4 text-sm font-medium text-primary">See prices →</span>
+          <span className="btn-primary-sm mt-4 self-start">See prices</span>
         </div>
         </Link>
       </div>

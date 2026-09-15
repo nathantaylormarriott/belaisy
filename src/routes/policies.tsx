@@ -54,8 +54,7 @@ function PoliciesPage() {
         <section className="pb-10 sm:pb-14">
           <div className="container-tight max-w-2xl text-center">
             <Reveal>
-              <p className="section-label justify-center">Salon policies</p>
-              <h1 className="mt-5 text-4xl sm:text-5xl">Before you visit</h1>
+              <h1 className="text-4xl sm:text-5xl">Before you visit</h1>
               <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
                 A few important policies to keep every visit safe and running smoothly —
                 for you and for our team.

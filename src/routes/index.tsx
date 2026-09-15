@@ -156,8 +156,7 @@ function Home() {
 
             <Reveal delay={120}>
               <div id="contact">
-                <p className="section-label">Get in touch</p>
-                <h3 className="mt-4 font-display text-2xl sm:text-3xl">Book your appointment</h3>
+                <h3 className="font-display text-2xl sm:text-3xl">Book your appointment</h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                   Call, message or DM us on Instagram — we&apos;ll find a time that works.
                 </p>
@@ -172,8 +171,7 @@ function Home() {
         <section id="services" className="py-20 sm:py-28">
           <div className="container-tight">
             <Reveal className="mx-auto max-w-2xl text-center">
-              <p className="section-label justify-center">What we offer</p>
-              <h2 className="mt-5 text-4xl sm:text-5xl">Hair, beauty and beyond</h2>
+              <h2 className="text-4xl sm:text-5xl">Hair, beauty and beyond</h2>
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
                 Salon cuts and colour, Leah&apos;s extensions, Amber&apos;s nails, permanent jewellery,
                 massage and medical aesthetics — tap a tile to view prices.
