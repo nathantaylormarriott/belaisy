@@ -5,6 +5,7 @@ import { MeshBackdrop } from "@/components/MeshBackdrop";
 import { Reveal } from "@/components/Reveal";
 import { SiteRevealPage } from "@/components/SiteRevealPage";
 import { business } from "@/lib/business";
+import { socialMeta } from "@/lib/sharePageMeta";
 import {
   treatmentChapters,
   treatmentOverview,
@@ -21,10 +22,7 @@ export const Route = createFileRoute("/menu")({
     meta: [
       { title },
       { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "/menu" },
+      ...socialMeta({ title, description, path: "/menu" }),
     ],
     links: [{ rel: "canonical", href: "/menu" }],
   }),

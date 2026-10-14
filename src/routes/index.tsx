@@ -17,6 +17,7 @@ import { TeamScrollRail } from "@/components/TeamScrollRail";
 import { getRequestOrigin } from "@/lib/origin.functions";
 import { fetchGoogleReviews } from "@/lib/google-reviews.functions";
 import { business } from "@/lib/business";
+import { socialMeta } from "@/lib/sharePageMeta";
 import {
   heroShopfront,
   salonInterior,
@@ -45,15 +46,12 @@ export const Route = createFileRoute("/")({
       meta: [
         { title },
         { name: "description", content: description },
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:type", content: "business.business" },
-        { property: "og:url", content: "/" },
-        { property: "og:image", content: ogImage },
-        { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:title", content: title },
-        { name: "twitter:description", content: description },
-        { name: "twitter:image", content: ogImage },
+        ...socialMeta({
+          title,
+          description,
+          path: "/",
+          origin: loaderData?.origin,
+        }),
       ],
       links: [{ rel: "canonical", href: "/" }],
       scripts: [

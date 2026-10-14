@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { HeroTimeProvider } from "../lib/hero-time";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { SITE_NAME, socialMeta } from "../lib/sharePageMeta";
 
 function NotFoundComponent() {
   return (
@@ -80,12 +81,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Belaisy Hair | Hair and Beauty Lounge in Atherstone" },
       { name: "description", content: "Belaisy Hair and Beauty Lounge on Long Street, Atherstone. Cuts, colour, treatments, nails and more." },
-      { name: "author", content: "Belaisy Hair" },
-      { property: "og:title", content: "Belaisy Hair and Beauty Lounge" },
-      { property: "og:description", content: "Hair · Beauty · Lounge on Long Street, Atherstone." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "author", content: SITE_NAME },
+      { name: "theme-color", content: "#faf6f1" },
+      ...socialMeta({
+        title: "Belaisy Hair and Beauty Lounge",
+        description: "Hair and beauty lounge on Long Street, Atherstone. Cuts, colour, treatments, nails and more.",
+        path: "/",
+      }),
     ],
     links: [
       {
@@ -97,6 +99,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap",
       },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
     ],
   }),
   shellComponent: RootShell,

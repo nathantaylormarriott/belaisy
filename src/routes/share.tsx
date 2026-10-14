@@ -14,7 +14,6 @@ import {
   Users,
 } from "lucide-react";
 import { MeshBackdrop } from "@/components/MeshBackdrop";
-import { mobileHero } from "@/assets";
 import { SiteLogo } from "@/components/SiteLogo";
 import { business, fullAddress } from "@/lib/business";
 import {
@@ -23,7 +22,7 @@ import {
   submitNetlifyForm,
 } from "@/lib/netlify-form";
 import { getRequestOrigin } from "@/lib/origin.functions";
-import { SHARE_PAGE_META } from "@/lib/sharePageMeta";
+import { SHARE_PAGE_META, socialMeta } from "@/lib/sharePageMeta";
 import { cn } from "@/lib/utils";
 
 const SHARE_TAB_CLASS =
@@ -180,25 +179,19 @@ const SOCIAL_LINKS = [
 
 export const Route = createFileRoute("/share")({
   loader: async () => ({ origin: await getRequestOrigin() }),
-  head: ({ loaderData }) => {
-    const ogImage = `${loaderData?.origin ?? ""}${mobileHero}`;
-    return {
-      meta: [
-        { title: SHARE_PAGE_META.title },
-        { name: "description", content: SHARE_PAGE_META.description },
-        { property: "og:title", content: SHARE_PAGE_META.ogTitle },
-        { property: "og:description", content: SHARE_PAGE_META.description },
-        { property: "og:type", content: "website" },
-        { property: "og:url", content: SHARE_PAGE_META.ogUrl },
-        { property: "og:image", content: ogImage },
-        { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:title", content: SHARE_PAGE_META.ogTitle },
-        { name: "twitter:description", content: SHARE_PAGE_META.description },
-        { name: "twitter:image", content: ogImage },
-      ],
-      links: [{ rel: "canonical", href: "/share" }],
-    };
-  },
+  head: ({ loaderData }) => ({
+    meta: [
+      { title: SHARE_PAGE_META.title },
+      { name: "description", content: SHARE_PAGE_META.description },
+      ...socialMeta({
+        title: SHARE_PAGE_META.ogTitle,
+        description: SHARE_PAGE_META.description,
+        path: "/share",
+        origin: loaderData?.origin,
+      }),
+    ],
+    links: [{ rel: "canonical", href: "/share" }],
+  }),
   component: SharePage,
 });
 

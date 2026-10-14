@@ -6,6 +6,7 @@ import { MeshBackdrop } from "@/components/MeshBackdrop";
 import { Reveal } from "@/components/Reveal";
 import { SiteRevealPage } from "@/components/SiteRevealPage";
 import { business } from "@/lib/business";
+import { socialMeta } from "@/lib/sharePageMeta";
 import { salonPolicies, type PolicyPoint } from "@/data/policies";
 
 const title = "Salon Policies | Belaisy Hair - Atherstone";
@@ -17,10 +18,7 @@ export const Route = createFileRoute("/policies")({
     meta: [
       { title },
       { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "/policies" },
+      ...socialMeta({ title, description, path: "/policies" }),
     ],
     links: [{ rel: "canonical", href: "/policies" }],
   }),
