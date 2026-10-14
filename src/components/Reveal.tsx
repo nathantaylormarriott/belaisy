@@ -8,7 +8,7 @@ type RevealProps = {
   delay?: number;
   /** When true, fades back out if the element leaves the viewport again. */
   out?: boolean;
-  /** When true (default), only animates in once — avoids Lenis/IO flicker. */
+  /** When true (default), only animates in once - avoids Lenis/IO flicker. */
   once?: boolean;
 };
 
@@ -49,11 +49,12 @@ export function Reveal({
   }, [out, once]);
 
   const stateClass = state === "in" ? "is-in" : state === "out" ? "is-out" : "";
+  const fillsParent = className.includes("h-full") || className.includes("h-[");
 
   return (
     <Tag ref={ref as never} className={className}>
       <div
-        className={cn("reveal", className.includes("h-full") && "h-full", stateClass)}
+        className={cn("reveal", fillsParent && "h-full min-h-0", stateClass)}
         style={{ transitionDelay: `${delay}ms` }}
       >
         {children}

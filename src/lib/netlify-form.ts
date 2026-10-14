@@ -1,4 +1,4 @@
-/** Netlify Forms — submissions must POST to a static path, not the SSR handler. */
+/** Netlify Forms - submissions must POST to a static path, not the SSR handler. */
 export const NETLIFY_FORM_NAME = "contact";
 export const NETLIFY_FORM_ENDPOINT = "/forms.html";
 

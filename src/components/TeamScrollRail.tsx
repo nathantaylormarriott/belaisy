@@ -12,7 +12,7 @@ function TeamHeader() {
     <div className="container-tight mx-auto max-w-2xl pb-8 pt-2 text-center sm:pb-10">
       <h2 className="text-4xl sm:text-5xl">The faces behind the lounge</h2>
       <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-        Stylists, beauty professionals and wellness specialists — all under one roof.
+        Stylists, beauty professionals and wellness specialists - all under one roof.
       </p>
     </div>
   );
@@ -20,8 +20,8 @@ function TeamHeader() {
 
 function TeamCard({ member }: { member: TeamMember }) {
   return (
-    <article className="card-soft flex w-[min(85vw,19rem)] shrink-0 snap-center flex-col p-5 sm:w-80 sm:p-6">
-      <div className="mx-auto aspect-square w-full max-w-[200px] overflow-hidden rounded-full ring-2 ring-border/60 ring-offset-2 ring-offset-card">
+    <article className="card-soft team-card flex w-[min(88vw,20.5rem)] shrink-0 snap-center flex-col p-5 sm:w-[22rem] sm:p-6">
+      <div className="mx-auto aspect-square w-full max-w-[200px] overflow-hidden rounded-full ring-2 ring-border/60 ring-offset-2 ring-offset-[oklch(0.97_0.02_350)]">
         <img
           src={member.image}
           alt={`Portrait of ${member.name}, ${member.role}`}
@@ -31,9 +31,11 @@ function TeamCard({ member }: { member: TeamMember }) {
           className="h-full w-full object-cover"
         />
       </div>
-      <h3 className="mt-5 text-center font-display text-2xl">{member.name}</h3>
-      <p className="mt-1 text-center text-xs font-medium text-primary">{member.role}</p>
-      <p className="mt-4 text-center text-sm leading-relaxed text-muted-foreground">{member.bio}</p>
+      <h3 className="mt-5 text-left font-display text-2xl">{member.name}</h3>
+      <p className="mt-1 text-left text-xs font-medium text-primary">{member.role}</p>
+      <p className="mt-4 min-h-[5.5rem] text-left text-sm leading-relaxed text-muted-foreground sm:min-h-[5.25rem]">
+        {member.bio}
+      </p>
     </article>
   );
 }
@@ -54,7 +56,7 @@ export function TeamScrollRail({ members }: TeamScrollRailProps) {
       if (!track) return;
       const maxOffset = Math.max(0, track.scrollWidth - window.innerWidth);
       const stickyHeight = sticky?.offsetHeight ?? 0;
-      setRunwayHeight(stickyHeight + maxOffset + 80);
+      setRunwayHeight(stickyHeight + maxOffset);
     };
 
     const update = () => {
@@ -102,7 +104,7 @@ export function TeamScrollRail({ members }: TeamScrollRailProps) {
       <div>
         <TeamHeader />
         <div className="mt-2 -mx-4 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6">
-          <div className="flex w-max gap-5 snap-x snap-mandatory">
+          <div className="flex w-max gap-9 snap-x snap-mandatory">
             {members.map((member) => (
               <TeamCard key={member.id} member={member} />
             ))}
@@ -120,13 +122,12 @@ export function TeamScrollRail({ members }: TeamScrollRailProps) {
         <div className="overflow-hidden pb-2 sm:pb-4">
           <div
             ref={trackRef}
-            className="flex w-max items-stretch gap-5 px-[max(1.25rem,4vw)] will-change-transform"
+            className="flex w-max items-stretch gap-9 px-[max(1.25rem,4vw)] will-change-transform"
             style={{ transform: `translate3d(-${offset}px, 0, 0)` }}
           >
             {members.map((member) => (
               <TeamCard key={member.id} member={member} />
             ))}
-            <div className="w-[max(1.25rem,4vw)] shrink-0 sm:w-[calc(50vw-10rem)]" aria-hidden="true" />
           </div>
         </div>
       </div>

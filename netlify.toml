@@ -8,3 +8,16 @@
   to = "/forms.html"
   status = 200
   force = true
+
+# TikTok feed and video proxy. Forced so the site SSR catch-all does not swallow them.
+[[redirects]]
+  from = "/api/tiktok-videos"
+  to = "/.netlify/functions/tiktok-videos"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/tiktok-media"
+  to = "/.netlify/functions/tiktok-media"
+  status = 200
+  force = true

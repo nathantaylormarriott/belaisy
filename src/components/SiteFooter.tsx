@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef, type ReactNode } from "react";
+import { forwardRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { SiteLogo } from "@/components/SiteLogo";
@@ -14,61 +14,26 @@ const footerLinks = [
   { label: "Team", href: "/#team" },
   { label: "Treatments", href: "/menu", route: true as const },
   { label: "Policies", href: "/policies", route: true as const },
+  { label: "Admin", href: "/admin", route: true as const },
   { label: "Visit", href: "/#visit" },
   { label: "Contact", href: "/#contact" },
 ] as const;
 
-function FooterFitWordmark({ children }: { children: ReactNode }) {
-  const containerRef = useRef<HTMLSpanElement>(null);
-  const textRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    const text = textRef.current;
-    if (!container || !text) return;
-
-    const fit = () => {
-      const width = container.clientWidth;
-      if (!width) return;
-
-      const root = parseFloat(getComputedStyle(document.documentElement).fontSize);
-      const min = root * 3.5;
-      const max = root * 17.5;
-
-      text.style.fontSize = `${max}px`;
-      const scale = width / text.scrollWidth;
-      const size = Math.min(max, Math.max(min, max * scale));
-      text.style.fontSize = `${size}px`;
-    };
-
-    fit();
-    const observer = new ResizeObserver(fit);
-    observer.observe(container);
-    void document.fonts?.ready.then(fit);
-
-    return () => observer.disconnect();
-  }, [children]);
-
-  return (
-    <span ref={containerRef} className="footer-wordmark-fit">
-      <span ref={textRef} className="footer-wordmark font-display">
-        {children}
-      </span>
-    </span>
-  );
-}
+const footerHeading =
+  "font-sans text-sm font-semibold tracking-normal text-foreground md:text-base";
+  "font-sans text-sm font-semibold tracking-normal text-foreground md:text-base";
 
 export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_props, ref) {
   return (
     <footer ref={ref} className="site-reveal-footer">
-      <div className="container-tight py-16 sm:py-20">
-        <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr_1fr] lg:gap-16">
+      <div className="container-tight pt-14 pb-12 sm:pt-16 sm:pb-16">
+        <div className="grid gap-10 sm:grid-cols-2 lg:ml-auto lg:w-[88%] lg:grid-cols-4 lg:items-start lg:gap-12">
           <div>
             <Link to="/" hash="top" className="inline-block">
               <SiteLogo />
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              {business.tagline} — a relaxed salon and beauty lounge on Long Street, Atherstone.
+              {business.tagline} - a relaxed salon and beauty lounge on Long Street, Atherstone.
             </p>
             <address className="mt-5 text-sm not-italic leading-relaxed text-muted-foreground">
               {business.street}
@@ -78,7 +43,7 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_props, re
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-foreground">Explore</h4>
+            <h4 className={footerHeading}>Explore</h4>
             <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
               {footerLinks.map((link) => (
                 <li key={link.href}>
@@ -97,7 +62,7 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_props, re
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-foreground">Connect</h4>
+            <h4 className={footerHeading}>Connect</h4>
             <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
               <li>
                 <a href={business.phoneHref} className="transition-colors hover:text-primary">
@@ -125,36 +90,33 @@ export const SiteFooter = forwardRef<HTMLElement>(function SiteFooter(_props, re
                 </a>
               </li>
             </ul>
+          </div>
 
-            <div className="mt-8 rounded-2xl border border-foreground/10 bg-white/40 p-4">
-              <p className="text-xs font-medium text-foreground">Website by Taylor-Marriott</p>
+          <div>
+            <h4 className={footerHeading}>Website by:</h4>
+              <a
+                href="https://www.taylor-marriott.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 block transition-opacity hover:opacity-80"
+              >
+                <img
+                  src="/taylor-marriott-logo.png"
+                  alt="Taylor-Marriott"
+                  className="block h-9 w-auto grayscale brightness-[0.55] md:h-14"
+                />
+              </a>
               <a
                 href={builderWhatsAppHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-primary transition-colors hover:text-primary/80"
+                className="footer-cta mt-2 inline-flex max-w-full items-center justify-center gap-1.5 rounded-full border border-foreground/20 bg-foreground/[0.04] px-2.5 py-1.5 text-[10px] font-semibold leading-tight text-foreground transition-colors hover:bg-foreground/[0.08] md:mt-4 md:gap-2 md:px-4 md:py-2 md:text-xs"
               >
-                Claim yours
-                <ArrowRight className="h-3 w-3 animate-arrow-nudge" aria-hidden />
+                Let&apos;s build yours
+                <ArrowRight className="relative z-[1] h-3.5 w-3.5 animate-arrow-nudge" aria-hidden />
               </a>
-            </div>
           </div>
         </div>
-
-        <p className="mt-12 text-center text-xs text-muted-foreground sm:text-left">
-          © {new Date().getFullYear()} {business.name}. All rights reserved.
-        </p>
-      </div>
-
-      <div className="footer-wordmark-wrap border-t border-foreground/8">
-        <Link
-          to="/"
-          hash="top"
-          className="footer-wordmark-link"
-          aria-label={`${business.name} home`}
-        >
-          <FooterFitWordmark>{business.shortName}</FooterFitWordmark>
-        </Link>
       </div>
     </footer>
   );

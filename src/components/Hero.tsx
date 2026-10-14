@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HeroTagline } from "@/components/HeroTagline";
 import { heroShopfront } from "@/assets";
 import { subscribeLenisScroll } from "@/lib/lenis-scroll";
@@ -14,13 +14,7 @@ const MARQUEE_WORDS = [
   "The Lounge",
 ] as const;
 
-function MarqueeSeparator() {
-  return (
-    <span className="shrink-0 font-display text-xl leading-none text-primary/40 sm:text-2xl" aria-hidden="true">
-      ·
-    </span>
-  );
-}
+const HERO_MARQUEE_COLOR = "text-primary/90";
 
 function HeroMarqueeTrack() {
   const loop = [...MARQUEE_WORDS, ...MARQUEE_WORDS];
@@ -28,12 +22,15 @@ function HeroMarqueeTrack() {
   return (
     <>
       {loop.map((word, index) => (
-        <Fragment key={`${word}-${index}`}>
-          {index > 0 ? <MarqueeSeparator /> : null}
-          <span className="shrink-0 font-display text-xl leading-none text-foreground/85 sm:text-2xl">
-            {word}
-          </span>
-        </Fragment>
+        <span
+          key={`${word}-${index}`}
+          className={cn(
+            "shrink-0 font-display text-xl leading-none sm:text-2xl",
+            HERO_MARQUEE_COLOR,
+          )}
+        >
+          {word}
+        </span>
       ))}
     </>
   );
@@ -54,7 +51,7 @@ export function Hero() {
     <section
       id="top"
       ref={ref}
-      className="relative grid h-[100svh] min-h-[620px] grid-rows-[1fr_auto] overflow-hidden"
+      className="relative flex h-[100svh] min-h-[620px] flex-col overflow-hidden"
     >
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
@@ -70,16 +67,16 @@ export function Hero() {
             className="absolute inset-0 h-full w-full object-cover object-[center_22%] md:object-center"
             fetchPriority="high"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[oklch(0.96_0.03_78/0.22)] via-[oklch(0.97_0.025_82/0.12)] to-[oklch(0.95_0.04_75/0.38)] md:from-[oklch(0.96_0.03_78/0.35)] md:via-[oklch(0.97_0.025_82/0.2)] md:to-[oklch(0.95_0.04_75/0.55)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[oklch(0.96_0.03_78/0.26)] via-[oklch(0.97_0.025_82/0.14)] to-[oklch(0.95_0.04_75/0.42)] md:from-[oklch(0.96_0.03_78/0.39)] md:via-[oklch(0.97_0.025_82/0.23)] md:to-[oklch(0.95_0.04_75/0.6)]" />
           <div className="absolute inset-0 hero-sepia-wash opacity-80 md:opacity-100" />
           <div className="absolute inset-0 opacity-80 md:opacity-100" style={{ background: "var(--hero-veil)" }} />
           <div className="absolute inset-0 opacity-70 md:opacity-100" style={{ background: "var(--hero-vignette)" }} />
         </div>
       </div>
 
-      <div className="relative z-10 flex min-h-0 items-center justify-center px-4 sm:px-6 md:px-8">
+      <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-4 sm:px-6 md:px-8">
         <div
-          className="hero-copy-shadow w-full"
+          className="pointer-events-auto w-full"
           style={{ opacity: fade, transform: `translate3d(0, ${offset * -0.06}px, 0)` }}
         >
           <HeroTagline />
@@ -88,12 +85,12 @@ export function Hero() {
 
       <div
         className={cn(
-          "hero-copy-shadow relative z-10 overflow-hidden border-t border-foreground/10 py-5 sm:py-6",
+          "hero-copy-shadow relative z-10 mt-auto overflow-hidden py-5 sm:py-6",
           "bg-gradient-to-t from-[oklch(0.96_0.03_78/0.55)] to-transparent backdrop-blur-[2px]",
         )}
         aria-label="Highlights"
       >
-        <div className="marquee-track flex w-max items-center gap-8 whitespace-nowrap sm:gap-12">
+        <div className="hero-marquee-track flex w-max items-center gap-8 whitespace-nowrap sm:gap-12">
           <HeroMarqueeTrack />
         </div>
       </div>

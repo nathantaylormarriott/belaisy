@@ -25,7 +25,7 @@ export function SiteLogo({ variant = "default", showTagline = true, className }:
       {showTagline ? (
         <span
           className={cn(
-            "mt-1 font-display text-[0.7rem] tracking-[0.01em]",
+            "mt-1 font-sans text-[0.7rem] font-semibold tracking-[0.01em]",
             onDark ? "text-white/75" : "text-muted-foreground",
           )}
         >

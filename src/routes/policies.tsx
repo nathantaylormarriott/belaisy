@@ -8,7 +8,7 @@ import { SiteRevealPage } from "@/components/SiteRevealPage";
 import { business } from "@/lib/business";
 import { salonPolicies, type PolicyPoint } from "@/data/policies";
 
-const title = "Salon Policies | Belaisy Hair — Atherstone";
+const title = "Salon Policies | Belaisy Hair - Atherstone";
 const description =
   "Patch test and cancellation policies at Belaisy Hair and Beauty Lounge on Long Street, Atherstone.";
 
@@ -56,7 +56,7 @@ function PoliciesPage() {
             <Reveal>
               <h1 className="text-4xl sm:text-5xl">Before you visit</h1>
               <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
-                A few important policies to keep every visit safe and running smoothly —
+                A few important policies to keep every visit safe and running smoothly  - 
                 for you and for our team.
               </p>
             </Reveal>

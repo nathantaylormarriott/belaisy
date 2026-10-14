@@ -21,17 +21,17 @@ export const business = {
   google:
     "https://www.google.com/maps/search/?api=1&query=Belaisy+Hair+41-43+Long+Street+Atherstone",
   hours: [
-    { day: "Monday", open: "Closed", close: "", schema: ["Mo", "00:00", "00:00"] },
-    { day: "Tuesday", open: "9:00 am", close: "6:00 pm", schema: ["Tu", "09:00", "18:00"] },
-    { day: "Wednesday", open: "9:00 am", close: "6:00 pm", schema: ["We", "09:00", "18:00"] },
+    { day: "Monday", open: "9:00 am", close: "3:00 pm", schema: ["Mo", "09:00", "15:00"] },
+    { day: "Tuesday", open: "9:00 am", close: "7:00 pm", schema: ["Tu", "09:00", "19:00"] },
+    { day: "Wednesday", open: "Closed", close: "", schema: ["We", "00:00", "00:00"] },
     { day: "Thursday", open: "9:00 am", close: "7:00 pm", schema: ["Th", "09:00", "19:00"] },
     { day: "Friday", open: "9:00 am", close: "7:00 pm", schema: ["Fr", "09:00", "19:00"] },
-    { day: "Saturday", open: "9:00 am", close: "5:00 pm", schema: ["Sa", "09:00", "17:00"] },
+    { day: "Saturday", open: "9:00 am", close: "3:00 pm", schema: ["Sa", "09:00", "15:00"] },
     { day: "Sunday", open: "Closed", close: "", schema: ["Su", "00:00", "00:00"] },
   ],
 } as const;
 
 export const fullAddress = `${business.street}, ${business.town}, ${business.county} ${business.postcode}`;
 
-/** Google Knowledge Graph ID — used for linking; reviews load via Places API. */
+/** Google Knowledge Graph ID - used for linking; reviews load via Places API. */
 export const businessGoogleKgmid = "" as const;

@@ -39,7 +39,7 @@ export const salonPolicies: Policy[] = [
       },
     ],
     closing: [
-      "The importance of a patch test is crucial — it helps keep you safe before any colour service.",
+      "The importance of a patch test is crucial - it helps keep you safe before any colour service.",
       "If you are unsure whether you need one, please ask when booking.",
     ],
   },
@@ -67,7 +67,7 @@ export const salonPolicies: Policy[] = [
     ],
     closing: [
       "We understand that unexpected situations and emergencies can happen. If you are unable to attend your appointment, please contact us as soon as possible and we will do our best to assist you.",
-      "We are on hand on social media or by phone to pick up cancellations — the earlier you let us know, the better we can help.",
+      "We are on hand on social media or by phone to pick up cancellations - the earlier you let us know, the better we can help.",
       "Thank you for your understanding and cooperation.",
     ],
   },

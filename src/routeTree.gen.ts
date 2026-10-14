@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as MenuRouteImport } from './routes/menu'
 import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as ShareRouteImport } from './routes/share'
@@ -17,6 +18,11 @@ import { Route as ShareRouteImport } from './routes/share'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MenuRoute = MenuRouteImport.update({
@@ -37,12 +43,14 @@ const ShareRoute = ShareRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/menu': typeof MenuRoute
   '/policies': typeof PoliciesRoute
   '/share': typeof ShareRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/menu': typeof MenuRoute
   '/policies': typeof PoliciesRoute
   '/share': typeof ShareRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/menu': typeof MenuRoute
   '/policies': typeof PoliciesRoute
   '/share': typeof ShareRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/menu' | '/policies' | '/share'
+  fullPaths: '/' | '/admin' | '/menu' | '/policies' | '/share'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/menu' | '/policies' | '/share'
-  id: '__root__' | '/' | '/menu' | '/policies' | '/share'
+  to: '/' | '/admin' | '/menu' | '/policies' | '/share'
+  id: '__root__' | '/' | '/admin' | '/menu' | '/policies' | '/share'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   MenuRoute: typeof MenuRoute
   PoliciesRoute: typeof PoliciesRoute
   ShareRoute: typeof ShareRoute
@@ -76,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/menu': {
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   MenuRoute: MenuRoute,
   PoliciesRoute: PoliciesRoute,
   ShareRoute: ShareRoute,

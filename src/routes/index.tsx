@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { SiteNav } from "@/components/SiteNav";
 import { Hero } from "@/components/Hero";
@@ -7,20 +8,24 @@ import { Reveal } from "@/components/Reveal";
 import { ContactForm } from "@/components/ContactForm";
 import { ReviewsCarousel } from "@/components/ReviewsCarousel";
 import { GoogleMapEmbed } from "@/components/GoogleMapEmbed";
+import { TikTokFeed } from "@/components/TikTokFeed";
+import { FaqSection } from "@/components/FaqSection";
 import { SiteRevealPage } from "@/components/SiteRevealPage";
 import { ServicesBentoGrid } from "@/components/ServicesBentoGrid";
 import { TeamScrollRail } from "@/components/TeamScrollRail";
 import { getRequestOrigin } from "@/lib/origin.functions";
 import { fetchGoogleReviews } from "@/lib/google-reviews.functions";
-import { business, fullAddress } from "@/lib/business";
+import { business } from "@/lib/business";
 import {
   heroShopfront,
   salonInterior,
   beautyTreatment,
   hairColour,
+  desk,
 } from "@/assets";
 import { teamMembers } from "@/data/team";
 import { homeTreatmentPreview } from "@/data/treatments";
+import { faqs } from "@/data/faq";
 
 const title = "Belaisy Hair | Hair and Beauty Lounge in Atherstone";
 const description =
@@ -110,6 +115,21 @@ export const Route = createFileRoute("/")({
               })),
           }),
         },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqs.map((item) => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: item.answer,
+              },
+            })),
+          }),
+        },
       ],
     };
   },
@@ -131,38 +151,50 @@ function Home() {
           <main className="relative">
 
         <section id="story" className="py-20 sm:py-28">
-          <div className="container-tight grid gap-14 lg:grid-cols-2 lg:items-start lg:gap-20">
-            <div>
-              <Reveal>
-                <h2 className="text-4xl sm:text-5xl">
-                  A lighter way to feel looked after
-                </h2>
-              </Reveal>
-              <Reveal delay={100}>
-                <div className="mt-8 space-y-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
-                  <p>
-                    Belaisy Hair and Beauty Lounge is a welcoming salon on Long Street,
-                    Atherstone — somewhere to switch off, feel cared for, and leave
-                    feeling like the best version of yourself.
-                  </p>
-                  <p>
-                    From precision cuts and colour to nails, aesthetics and wellness,
-                    our team of talented stylists and independent professionals make
-                    every visit feel unhurried and personal.
-                  </p>
+          <div className="container-tight grid gap-14 lg:grid-cols-2 lg:items-stretch lg:gap-20">
+            <div className="flex min-h-0 flex-col gap-6 lg:h-full lg:grid lg:grid-rows-[minmax(0,1fr)_auto] lg:gap-7">
+              <Reveal className="min-h-[14rem] sm:min-h-[18rem] lg:min-h-0 lg:h-full">
+                <div className="content-image relative h-full min-h-[14rem] overflow-hidden rounded-3xl border border-border/60 shadow-[var(--shadow-card)] sm:min-h-[18rem] lg:min-h-0">
+                  <img
+                    src={desk}
+                    alt="Reception at Belaisy Hair and Beauty Lounge, Long Street, Atherstone"
+                    width={1075}
+                    height={1049}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover object-[center_42%]"
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[oklch(0.32_0.06_350/0.88)] via-[oklch(0.35_0.05_350/0.45)] to-transparent px-5 pb-5 pt-14 sm:px-6 sm:pb-6 sm:pt-16"
+                    aria-hidden
+                  />
+                  <h2 className="absolute inset-x-0 bottom-0 px-5 pb-5 font-display text-[1.75rem] leading-[1.12] tracking-[-0.03em] text-primary-foreground sm:px-6 sm:pb-6 sm:text-[2rem]">
+                    A lighter way to feel looked after
+                  </h2>
                 </div>
               </Reveal>
+
+              <div className="shrink-0 lg:row-start-2">
+                <Reveal delay={100}>
+                  <div className="space-y-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
+                    <p>
+                      Belaisy Hair and Beauty Lounge is a welcoming salon on Long Street,
+                      Atherstone - somewhere to switch off, feel cared for, and leave
+                      feeling like the best version of yourself.
+                    </p>
+                    <p>
+                      From precision cuts and colour to nails, aesthetics and wellness,
+                      our team of talented stylists and independent professionals make
+                      every visit feel unhurried and personal.
+                    </p>
+                  </div>
+                </Reveal>
+              </div>
             </div>
 
-            <Reveal delay={120}>
-              <div id="contact">
-                <h3 className="font-display text-2xl sm:text-3xl">Book your appointment</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Call, message or DM us on Instagram — we&apos;ll find a time that works.
-                </p>
-                <div className="mt-6">
-                  <ContactForm />
-                </div>
+            <Reveal delay={120} className="h-full min-h-0">
+              <div id="contact" className="h-full min-h-0">
+                <ContactForm className="h-full" />
               </div>
             </Reveal>
           </div>
@@ -174,7 +206,7 @@ function Home() {
               <h2 className="text-4xl sm:text-5xl">Hair, beauty and beyond</h2>
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
                 Salon cuts and colour, Leah&apos;s extensions, Amber&apos;s nails, permanent jewellery,
-                massage and medical aesthetics — tap a tile to view prices.
+                massage and medical aesthetics - tap a tile to view prices.
               </p>
             </Reveal>
 
@@ -216,12 +248,12 @@ function Home() {
           </div>
         </section>
 
-        <section className="overflow-hidden py-20 sm:py-24">
+        <section className="overflow-x-hidden py-20 sm:py-24">
           <div className="container-tight text-center">
             <Reveal>
               {reviews.length > 0 ? (
                 <>
-                  <div className="mt-4 flex items-center justify-center gap-1 text-accent" aria-label="Rated 5 out of 5 on Google">
+                  <div className="mt-4 flex items-center justify-center gap-1 text-[#F4B400]" aria-label="Rated 5 out of 5 on Google">
                     {Array.from({ length: 5 }).map((_, i) => (
                       <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                         <path d="m12 2 2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z" />
@@ -250,25 +282,17 @@ function Home() {
         <section id="visit" className="py-20 sm:py-28">
           <div className="container-tight">
             <Reveal>
-              <p className="section-label">Find us</p>
-              <h2 className="mt-5 text-4xl sm:text-5xl">Visit Belaisy</h2>
+              <h2 className="text-4xl sm:text-5xl">Visit Belaisy</h2>
             </Reveal>
 
             <div className="mt-8 grid gap-8 lg:grid-cols-2 lg:items-stretch lg:gap-10 [&>*]:h-full">
               <Reveal className="h-full min-h-[360px] sm:min-h-[420px]">
                 <div className="card-soft h-full p-6 sm:p-8">
                 <p className="font-display text-xl text-foreground">{business.name}</p>
-                <address className="mt-3 not-italic text-sm leading-relaxed text-muted-foreground">
-                  {business.street}
-                  <br />
-                  {business.town}, {business.county}
-                  <br />
-                  {business.postcode}
-                </address>
 
-                <dl className="mt-6 space-y-2">
+                <dl className="mt-6 space-y-3.5">
                   {business.hours.map((h) => (
-                    <div key={h.day} className="flex justify-between gap-4 text-sm">
+                    <div key={h.day} className="flex justify-between gap-4 text-sm leading-6">
                       <dt className="text-muted-foreground">{h.day}</dt>
                       <dd className="font-medium text-foreground">
                         {h.open === "Closed" ? "Closed" : `${h.open} – ${h.close}`}
@@ -277,17 +301,13 @@ function Home() {
                   ))}
                 </dl>
 
-                <div className="mt-8 flex flex-wrap gap-3">
+                <div className="mt-8">
                   <a
-                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${business.name}, ${fullAddress}`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-ghost"
+                    href={business.phoneHref}
+                    className="book-now-cta inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium"
                   >
-                    Get directions
-                  </a>
-                  <a href={business.phoneHref} className="btn-primary">
-                    Call to book
+                    <span className="relative z-[1]">Call to book</span>
+                    <ArrowRight className="book-now-arrow-nudge relative z-[1] h-4 w-4" aria-hidden />
                   </a>
                 </div>
                 </div>
@@ -301,6 +321,9 @@ function Home() {
             </div>
           </div>
         </section>
+
+        <TikTokFeed />
+        <FaqSection />
           </main>
         </div>
       </SiteRevealPage>

@@ -9,7 +9,7 @@ export function getSunTimes(date: Date, lat: number, lng: number): SunTimes {
   const times = getTimes(date, lat, lng);
 
   if (!times.sunrise || !times.sunset) {
-    // Polar edge case — not relevant for Atherstone, but keeps types sound.
+    // Polar edge case - not relevant for Atherstone, but keeps types sound.
     const fallback = new Date(date);
     fallback.setHours(6, 0, 0, 0);
     const sunrise = new Date(fallback);

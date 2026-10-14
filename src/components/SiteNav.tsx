@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SiteLogo } from "@/components/SiteLogo";
 import { business } from "@/lib/business";
@@ -59,24 +59,19 @@ export function SiteNav() {
   const closeMenu = () => setMenuOpen(false);
 
   const linkClass =
-    "text-sm font-medium text-muted-foreground transition-colors hover:text-primary";
+    "text-[0.9375rem] font-medium text-[oklch(0.4_0.04_325)] transition-colors hover:text-primary";
 
   return (
     <>
-      <header
-        className={cn(
-          "fixed inset-x-0 top-0 z-50 px-4 pt-4 transition-all duration-300 sm:px-6",
-          scrolled ? "pt-3" : "pt-5",
-        )}
-      >
+      <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6">
         <div
           className={cn(
-            "container-tight nav-glass flex items-center justify-between gap-4 rounded-full px-5 py-3 sm:px-6",
+            "container-tight nav-glass flex items-center justify-between gap-4 rounded-full px-5 py-3 transition-shadow duration-300 sm:px-6",
             scrolled && "shadow-[var(--shadow-card)]",
           )}
         >
           <a href="/#top" onClick={closeMenu}>
-            <SiteLogo showTagline={false} className="scale-90 sm:scale-100" />
+            <SiteLogo showTagline={false} className="nav-mauve-logo scale-90 sm:scale-100" />
           </a>
 
           <nav className="hidden items-center gap-7 lg:flex">
@@ -88,9 +83,14 @@ export function SiteNav() {
           <div className="flex shrink-0 items-center gap-2">
             <a
               href={business.phoneHref}
-              className="btn-primary inline-flex px-3.5 py-2 text-xs sm:px-5 sm:py-2.5 sm:text-sm"
+              className="book-now-cta inline-flex items-center justify-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-medium sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+              aria-label="Book now"
             >
-              Book now
+              <span className="relative z-[1]">Book now</span>
+              <ArrowRight
+                className="relative z-[1] h-3.5 w-3.5 book-now-arrow-nudge sm:h-4 sm:w-4"
+                aria-hidden
+              />
             </a>
 
             <button
@@ -129,7 +129,7 @@ export function SiteNav() {
             <NavLink
               key={link.href}
               link={link}
-              className="rounded-2xl px-4 py-3.5 text-base font-medium text-foreground transition-colors hover:bg-blush"
+              className="rounded-2xl px-4 py-3.5 text-base font-medium text-[oklch(0.4_0.04_325)] transition-colors hover:bg-blush"
               onNavigate={closeMenu}
             />
           ))}

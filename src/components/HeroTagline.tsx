@@ -2,7 +2,7 @@ import { business } from "@/lib/business";
 import { cn } from "@/lib/utils";
 
 const heroCopyClass =
-  "font-[family-name:var(--font-sans)] text-base font-semibold leading-none tracking-[0.01em] text-foreground/95 sm:text-lg md:text-xl lg:text-2xl";
+  "hero-tagline mauve-gradient-type font-[family-name:var(--font-sans)] text-base font-semibold tracking-[0.01em] sm:text-lg md:text-xl lg:text-2xl";
 
 type HeroTaglineProps = {
   className?: string;
@@ -21,10 +21,10 @@ export function HeroTagline({ className }: HeroTaglineProps) {
         }}
       />
 
-      <div className="relative z-[1] max-w-full pb-4 md:pb-5">
-        <h1 className="hero-wordmark font-display text-foreground">{business.shortName}</h1>
+      <div className="relative z-[1] flex max-w-full flex-col items-start">
+        <h1 className="hero-wordmark mauve-gradient-type font-display">{business.shortName}</h1>
 
-        <p className={cn(heroCopyClass, "absolute top-full left-0 -mt-2 text-left sm:-mt-2.5 md:-mt-3 lg:-mt-3.5")}>
+        <p className={cn(heroCopyClass, "hero-lockup-shadow text-left")}>
           {business.logoTagline}
         </p>
       </div>

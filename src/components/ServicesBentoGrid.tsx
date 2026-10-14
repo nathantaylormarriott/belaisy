@@ -8,10 +8,20 @@ import {
   Scissors,
   Sparkles,
   type LucideIcon,
+  ArrowRight,
 } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import type { HomeTreatmentPreview } from "@/data/treatments";
 import { Reveal } from "@/components/Reveal";
+import {
+  ardicAesthetics,
+  colourAndHighlights,
+  colourCutsExtensions,
+  cutsStylingTreatments,
+  gelBiabNailart,
+  permanentJewellery,
+  serenityCalmMassage,
+} from "@/assets";
 import { cn } from "@/lib/utils";
 
 type ServicesBentoGridProps = {
@@ -21,7 +31,6 @@ type ServicesBentoGridProps = {
 type BentoTile = {
   span: string;
   rotate: string;
-  tint: string;
   icon: LucideIcon;
   delay: number;
 };
@@ -30,53 +39,56 @@ const tileLayout: BentoTile[] = [
   {
     span: "md:col-span-6",
     rotate: "-rotate-[1.75deg]",
-    tint: "from-blush/90 to-blush/40",
     icon: Scissors,
     delay: 0,
   },
   {
     span: "md:col-span-6",
     rotate: "rotate-[2.25deg]",
-    tint: "from-lilac/80 to-blush/30",
     icon: Palette,
     delay: 60,
   },
   {
     span: "md:col-span-4",
     rotate: "-rotate-[1.25deg]",
-    tint: "from-sage/70 to-blush/25",
     icon: Layers,
     delay: 100,
   },
   {
     span: "md:col-span-4",
     rotate: "rotate-[2deg]",
-    tint: "from-blush/85 to-lilac/20",
     icon: Sparkles,
     delay: 140,
   },
   {
     span: "md:col-span-4",
     rotate: "-rotate-[2.5deg]",
-    tint: "from-lilac/75 to-sage/25",
     icon: Link2,
     delay: 180,
   },
   {
     span: "md:col-span-5",
     rotate: "rotate-[1.5deg]",
-    tint: "from-sage/65 to-blush/30",
     icon: Hand,
     delay: 220,
   },
   {
     span: "md:col-span-7",
     rotate: "-rotate-[0.85deg]",
-    tint: "from-blush/80 to-lilac/35",
     icon: WandSparkles,
     delay: 260,
   },
 ];
+
+const servicePhotos: Record<string, string> = {
+  "belaisy-hair": cutsStylingTreatments,
+  "belaisy-colour": colourAndHighlights,
+  "leah-hair": colourCutsExtensions,
+  "amber-nails": gelBiabNailart,
+  "maddie-jewellery": permanentJewellery,
+  "joanne-massage": serenityCalmMassage,
+  "medine-aesthetics": ardicAesthetics,
+};
 
 function BentoCard({
   item,
@@ -98,22 +110,21 @@ function BentoCard({
           hash={item.chapterId}
           className="bento-card relative flex h-full min-h-[11.5rem] flex-col rounded-3xl border-2 border-white bg-card p-5 sm:min-h-[12.5rem] sm:p-6"
         >
+          <img
+            src={servicePhotos[item.chapterId]}
+            alt=""
+            className="bento-photo pointer-events-none absolute inset-0 h-full w-full rounded-[1.375rem] object-cover"
+          />
           <div
-            className={cn(
-              "pointer-events-none absolute inset-0 overflow-hidden rounded-[1.375rem] bg-gradient-to-br opacity-90",
-              tile.tint,
-            )}
+            className="pointer-events-none absolute inset-0 rounded-[1.375rem] bg-gradient-to-t from-card via-card/78 to-card/16"
             aria-hidden="true"
           />
 
         <div
-          className={cn(
-            "relative z-[1] flex items-center justify-center rounded-2xl border border-primary/10 bg-white/55 text-primary shadow-sm",
-            isWide ? "mb-5 h-14 w-14 sm:h-16 sm:w-16" : "mb-4 h-12 w-12 sm:h-14 sm:w-14",
-          )}
+          className="relative z-[1] mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-primary/10 bg-white/85 text-primary shadow-sm sm:h-14 sm:w-14"
           aria-hidden="true"
         >
-          <Icon className={cn(isWide ? "h-7 w-7 sm:h-8 sm:w-8" : "h-6 w-6 sm:h-7 sm:w-7")} strokeWidth={1.5} />
+          <Icon className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={1.5} />
         </div>
 
         <div className="relative z-[1] mt-auto flex flex-col">
@@ -159,8 +170,12 @@ export function ServicesBentoGrid({ items }: ServicesBentoGridProps) {
       </div>
 
       <Reveal delay={320} className="mt-10 text-center">
-        <Link to="/menu" className="btn-primary">
-          View full price list
+        <Link
+          to="/menu"
+          className="book-now-cta inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium"
+        >
+          <span className="relative z-[1]">View full price list</span>
+          <ArrowRight className="relative z-[1] h-4 w-4 book-now-arrow-nudge" aria-hidden />
         </Link>
       </Reveal>
     </div>

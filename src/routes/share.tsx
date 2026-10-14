@@ -125,7 +125,7 @@ function ShareContactForm() {
   if (status === "sent") {
     return (
       <div className="border-t border-border px-5 py-4 text-center" role="status" aria-live="polite">
-        <p className="text-sm font-medium text-primary">Thank you — we&apos;ll be in touch shortly.</p>
+        <p className="text-sm font-medium text-primary">Thank you - we&apos;ll be in touch shortly.</p>
       </div>
     );
   }
@@ -148,7 +148,7 @@ function ShareContactForm() {
       <input name="name" type="text" autoComplete="name" placeholder="Your name" className={SHARE_FIELD_CLASS} />
       <input name="email" type="email" autoComplete="email" placeholder="you@example.com" required className={SHARE_FIELD_CLASS} />
       <textarea name="message" rows={3} placeholder="Your message…" required className={cn(SHARE_FIELD_CLASS, "h-auto min-h-[5.5rem] resize-none py-3")} />
-      {status === "error" && <p className="text-sm text-destructive">Something went wrong — please call {business.phoneDisplay}.</p>}
+      {status === "error" && <p className="text-sm text-destructive">Something went wrong - please call {business.phoneDisplay}.</p>}
       <button type="submit" disabled={status === "sending"} className={cn(SHARE_TAB_CLASS, "min-h-[2.75rem] w-full justify-center gap-2 bg-primary text-primary-foreground hover:text-primary-foreground")}>
         <span>{status === "sending" ? "Sending…" : "Send message"}</span>
         <Send className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden />
@@ -213,7 +213,7 @@ function SharePage() {
           <header className="text-center">
             <SiteLogo className="mx-auto items-center" />
             <p className="mx-auto mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              {business.tagline} — On Long Street, Atherstone
+              {business.tagline} - On Long Street, Atherstone
             </p>
             <nav className="mt-5 flex items-center justify-center gap-1" aria-label="Social links">
               {SOCIAL_LINKS.map(({ label, href, Icon }) => (

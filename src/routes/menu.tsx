@@ -12,7 +12,7 @@ import {
   type TreatmentItem,
 } from "@/data/treatments";
 
-const title = "Treatments and Price List | Belaisy Hair — Atherstone";
+const title = "Treatments and Price List | Belaisy Hair - Atherstone";
 const description =
   "Full price list for hair, colour, nails, permanent jewellery, massage and aesthetics at Belaisy Hair and Beauty Lounge, Long Street, Atherstone.";
 

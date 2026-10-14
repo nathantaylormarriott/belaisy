@@ -62,7 +62,7 @@ export const treatmentChapters: TreatmentChapter[] = [
           { name: "Dry cut", price: "from £21.00" },
           { name: "Shampoo cut", price: "£26.50" },
           { name: "Cut and finish", price: "£42.00" },
-          { name: "Cut and finish — long hair", price: "£47.00" },
+          { name: "Cut and finish - long hair", price: "£47.00" },
           { name: "Blow dry", price: "£20.00" },
           { name: "Long hair blow dry", price: "£25.00" },
           { name: "Bouncy blow dry", price: "£30.00" },
@@ -101,8 +101,8 @@ export const treatmentChapters: TreatmentChapter[] = [
         id: "belaisy-semi",
         title: "Semi-permanent colour",
         items: [
-          { name: "Semi — short", price: "£25.00" },
-          { name: "Semi — long", price: "£33.50" },
+          { name: "Semi - short", price: "£25.00" },
+          { name: "Semi - long", price: "£33.50" },
         ],
       },
       {
@@ -110,7 +110,7 @@ export const treatmentChapters: TreatmentChapter[] = [
         title: "Permanent full-head colour",
         items: [
           { name: "Full head", price: "£50.00" },
-          { name: "Full head — long hair", price: "£65.00" },
+          { name: "Full head - long hair", price: "£65.00" },
         ],
       },
       {
@@ -119,15 +119,15 @@ export const treatmentChapters: TreatmentChapter[] = [
         items: [
           { name: "Half head foils", price: "£60.00" },
           { name: "Full head foils", price: "£80.00" },
-          { name: "Full head foils — long hair", price: "£90.00" },
+          { name: "Full head foils - long hair", price: "£90.00" },
         ],
       },
       {
         id: "belaisy-toners",
         title: "Toners",
         items: [
-          { name: "Toner — short", price: "£20.00" },
-          { name: "Toner — long", price: "£30.00" },
+          { name: "Toner - short", price: "£20.00" },
+          { name: "Toner - long", price: "£30.00" },
         ],
       },
     ],
@@ -136,7 +136,7 @@ export const treatmentChapters: TreatmentChapter[] = [
   {
     id: "leah-hair",
     label: "Leah",
-    title: "Leah Allton — Hair",
+    title: "Leah Allton - Hair",
     provider: "Leah Allton",
     providerRole: "Hair stylist and extensionist",
     intro:
@@ -174,7 +174,7 @@ export const treatmentChapters: TreatmentChapter[] = [
       },
       {
         id: "leah-extensions",
-        title: "Hair extensions — fittings",
+        title: "Hair extensions - fittings",
         subtitle: "Ultra Tips · Remi Cachet",
         note: "Price based on number of strands / packs fitted",
         items: [
@@ -191,11 +191,11 @@ export const treatmentChapters: TreatmentChapter[] = [
   {
     id: "amber-nails",
     label: "Nails",
-    title: "Amber — Nails",
+    title: "Amber - Nails",
     provider: "Amber",
     providerRole: "Nail technician",
     intro:
-      "Gel polish, BIAB (Builder in a Bottle) and toe treatments. Amber offers BIAB and a range of nail art — introductory prices currently apply.",
+      "Gel polish, BIAB (Builder in a Bottle) and toe treatments. Amber offers BIAB and a range of nail art - introductory prices currently apply.",
     sections: [
       {
         id: "amber-gel",
@@ -209,7 +209,7 @@ export const treatmentChapters: TreatmentChapter[] = [
       },
       {
         id: "amber-biab",
-        title: "BIAB — Builder in a Bottle",
+        title: "BIAB - Builder in a Bottle",
         items: [
           { name: "BIAB overlay (plain)", price: "£25" },
           { name: "BIAB with gel colour", price: "£30" },
@@ -246,11 +246,11 @@ export const treatmentChapters: TreatmentChapter[] = [
   {
     id: "maddie-jewellery",
     label: "Jewellery",
-    title: "Maddie — Permanent jewellery",
+    title: "Maddie - Permanent jewellery",
     provider: "FordEverLinks",
     providerRole: "Permanent jewellery by Maddie",
     intro:
-      "Welded permanent jewellery — bracelets, anklets and custom charms. Each piece is fitted to you with no clasp, perfect for everyday wear.",
+      "Welded permanent jewellery - bracelets, anklets and custom charms. Each piece is fitted to you with no clasp, perfect for everyday wear.",
     sections: [
       {
         id: "jewellery-bracelets",
@@ -291,7 +291,7 @@ export const treatmentChapters: TreatmentChapter[] = [
   {
     id: "joanne-massage",
     label: "Massage",
-    title: "Joanne — Serenity Calm",
+    title: "Joanne - Serenity Calm",
     provider: "Serenity Calm",
     providerRole: "Massage therapy by Joanne",
     intro:
@@ -306,7 +306,7 @@ export const treatmentChapters: TreatmentChapter[] = [
             name: "Manual lymphatic drainage",
             price: "£70",
             duration: "60 mins",
-            description: "Vodder method — gentle, specialised treatment to support detoxification and reduce fluid retention.",
+            description: "Vodder method - gentle, specialised treatment to support detoxification and reduce fluid retention.",
           },
           {
             name: "Full body massage",
@@ -333,7 +333,7 @@ export const treatmentChapters: TreatmentChapter[] = [
   {
     id: "medine-aesthetics",
     label: "Aesthetics",
-    title: "Medine — Ardic Aesthetics",
+    title: "Medine - Ardic Aesthetics",
     provider: "Ardic Aesthetics",
     providerRole: "Medical aesthetics and skin rejuvenation by Medine",
     intro:
@@ -360,7 +360,7 @@ export const treatmentChapters: TreatmentChapter[] = [
           { name: "PRP hair", price: "£150" },
           { name: "PRP face and neck", price: "£180" },
           {
-            name: "Signature package — hair + face + neck",
+            name: "Signature package - hair + face + neck",
             price: "£250",
             note: "Best value package",
           },
@@ -380,8 +380,8 @@ export const treatmentChapters: TreatmentChapter[] = [
         title: "Mesotherapy and fillers",
         items: [
           { name: "Mesotherapy", price: "£120" },
-          { name: "Lip filler — 0.5ml", price: "£120" },
-          { name: "Lip filler — 1ml", price: "£160" },
+          { name: "Lip filler - 0.5ml", price: "£120" },
+          { name: "Lip filler - 1ml", price: "£160" },
           { name: "Dermal filler (other areas)", price: "£160/ml" },
         ],
       },
@@ -394,7 +394,7 @@ export const treatmentOverview = [
   { label: "Belaisy hair", href: "#belaisy-hair", description: "Cuts, styling and treatments" },
   { label: "Belaisy colour", href: "#belaisy-colour", description: "Colour, foils and toners" },
   { label: "Leah Allton", href: "#leah-hair", description: "Colour, cuts and extensions" },
-  { label: "Amber — nails", href: "#amber-nails", description: "Gel, BIAB and nail art" },
+  { label: "Amber - nails", href: "#amber-nails", description: "Gel, BIAB and nail art" },
   { label: "Permanent jewellery", href: "#maddie-jewellery", description: "FordEverLinks by Maddie" },
   { label: "Serenity Calm", href: "#joanne-massage", description: "Massage by Joanne" },
   { label: "Ardic Aesthetics", href: "#medine-aesthetics", description: "Medical aesthetics by Medine" },
@@ -407,7 +407,7 @@ export type HomeTreatmentPreview = {
   summary: string;
 };
 
-/** Curated snapshot for the homepage — links through to the full price list. */
+/** Curated snapshot for the homepage - links through to the full price list. */
 export const homeTreatmentPreview: HomeTreatmentPreview[] = [
   {
     chapterId: "belaisy-hair",
@@ -454,9 +454,9 @@ export const homeTreatmentPreview: HomeTreatmentPreview[] = [
 ];
 
 export const treatmentServiceNotes = [
-  "Belaisy Lounge is home to independent beauty professionals — book the right therapist for your treatment.",
+  "Belaisy Lounge is home to independent beauty professionals - book the right therapist for your treatment.",
   "Colour and aesthetic services require a consultation; patch tests are needed at least 48 hours before colour.",
-  "Prices were taken from each therapist's published price list — confirm exact pricing when booking.",
+  "Prices were taken from each therapist's published price list - confirm exact pricing when booking.",
   "Call 01827 954544 for salon appointments, or contact individual therapists where a direct number is listed.",
   "Follow @belaisylounge on Instagram for updates, offers and availability.",
 ] as const;

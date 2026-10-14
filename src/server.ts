@@ -2,6 +2,8 @@ import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+import { getTikTokVideos, TIKTOK_PROFILE_URL } from "./lib/tiktok-feed";
+import { proxyTikTokVideo } from "./lib/tiktok-media";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -19,7 +21,7 @@ async function getServerEntry(): Promise<ServerEntry> {
 }
 
 // h3 swallows in-handler throws into a normal 500 Response with body
-// {"unhandled":true,"message":"HTTPError"} — try/catch alone never fires for those.
+// {"unhandled":true,"message":"HTTPError"} - try/catch alone never fires for those.
 async function normalizeCatastrophicSsrResponse(response: Response): Promise<Response> {
   if (response.status < 500) return response;
   const contentType = response.headers.get("content-type") ?? "";
@@ -46,6 +48,25 @@ function isH3SwallowedErrorBody(body: string): boolean {
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    const url = new URL(request.url);
+
+    if (url.pathname === "/api/tiktok-videos") {
+      try {
+        const videos = await getTikTokVideos();
+        return Response.json(
+          { videos, profileUrl: TIKTOK_PROFILE_URL },
+          { headers: { "Cache-Control": "public, max-age=300, stale-while-revalidate=3600" } },
+        );
+      } catch (error) {
+        console.error(error);
+        return Response.json({ videos: [], profileUrl: TIKTOK_PROFILE_URL }, { status: 200 });
+      }
+    }
+
+    if (url.pathname === "/api/tiktok-media") {
+      return proxyTikTokVideo(url.searchParams.get("url") ?? "");
+    }
+
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
