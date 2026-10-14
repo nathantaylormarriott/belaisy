@@ -8,7 +8,7 @@ import {
 } from "@/lib/netlify-form";
 import { getTimeSlotsForDay, openDays } from "@/lib/appointment-slots";
 import { business } from "@/lib/business";
-import { createFormBooking } from "@/lib/bookings.functions";
+import { createFormBooking } from "@/lib/create-form-booking.functions";
 
 type ContactFormProps = {
   className?: string;

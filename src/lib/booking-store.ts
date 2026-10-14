@@ -1,9 +1,7 @@
-import { createServerFn } from "@tanstack/react-start";
 import { getUser } from "@netlify/identity";
 import { and, eq, gte, isNull, lt, ne, or } from "drizzle-orm";
 import { bookings, type BookingRow } from "../../db/schema";
 import { calendarStaff } from "@/data/calendar-staff";
-import { nextSlotIso } from "@/lib/booking-time";
 import { seedDemoBookingsIfEmpty } from "@/lib/booking-demo";
 
 export type BookingStatus = "requested" | "confirmed" | "cancelled";
@@ -21,7 +19,7 @@ export type Booking = {
   source: string;
 };
 
-type BookingInput = {
+export type BookingInput = {
   clientName: string;
   phone: string;
   service: string;
@@ -64,17 +62,17 @@ async function database() {
   return db;
 }
 
-function cleanStaff(staffId: string | null | undefined) {
+export function cleanStaff(staffId: string | null | undefined) {
   if (!staffId) return null;
   return calendarStaff.some((member) => member.id === staffId) ? staffId : null;
 }
 
-function cleanStatus(status: string): BookingStatus {
+export function cleanStatus(status: string): BookingStatus {
   if (status === "confirmed" || status === "cancelled" || status === "requested") return status;
   return "requested";
 }
 
-async function requireTeam(preview?: boolean) {
+export async function requireTeam(preview?: boolean) {
   if (process.env["NODE_ENV"] !== "production" && preview) return;
   try {
     const user = await getUser();
@@ -85,7 +83,7 @@ async function requireTeam(preview?: boolean) {
   throw new Error("Sign in required");
 }
 
-async function listRows(from: string, to: string): Promise<Booking[]> {
+export async function listRows(from: string, to: string): Promise<Booking[]> {
   ensureMemoryStore();
   if (useMemory()) {
     const start = new Date(from).getTime();
@@ -111,7 +109,7 @@ async function listRows(from: string, to: string): Promise<Booking[]> {
   return rows.map(toBooking);
 }
 
-async function insertBooking(input: BookingInput, source: string): Promise<Booking> {
+export async function insertBooking(input: BookingInput, source: string): Promise<Booking> {
   const row: Booking = {
     id: memoryId.value,
     clientName: input.clientName.trim(),
@@ -152,94 +150,46 @@ async function insertBooking(input: BookingInput, source: string): Promise<Booki
   return toBooking(created);
 }
 
-export const listBookings = createServerFn({ method: "POST" })
-  .validator((data: { from: string; to: string; preview?: boolean }) => data)
-  .handler(async ({ data }) => {
-    await requireTeam(data.preview);
-    return listRows(data.from, data.to);
-  },
-);
+export async function updateBooking(id: number, input: BookingInput): Promise<Booking> {
+  const next = {
+    clientName: input.clientName.trim(),
+    phone: input.phone.trim(),
+    service: input.service.trim(),
+    staffId: cleanStaff(input.staffId),
+    startsAt: input.startsAt,
+    durationMinutes: input.durationMinutes,
+    status: cleanStatus(input.status),
+    notes: input.notes.trim(),
+  };
+  if (!next.clientName) throw new Error("Client name is required");
 
-export const saveBooking = createServerFn({ method: "POST" })
-  .validator((data: BookingInput & { id?: number; preview?: boolean }) => data)
-  .handler(async ({ data }) => {
-    await requireTeam(data.preview);
-    if (data.id) {
-      const next = {
-        clientName: data.clientName.trim(),
-        phone: data.phone.trim(),
-        service: data.service.trim(),
-        staffId: cleanStaff(data.staffId),
-        startsAt: data.startsAt,
-        durationMinutes: data.durationMinutes,
-        status: cleanStatus(data.status),
-        notes: data.notes.trim(),
-      };
-      if (!next.clientName) throw new Error("Client name is required");
+  if (useMemory()) {
+    const current = memory.find((booking) => booking.id === id);
+    if (!current) throw new Error("Booking not found");
+    Object.assign(current, next);
+    return current;
+  }
 
-      if (useMemory()) {
-        const current = memory.find((booking) => booking.id === data.id);
-        if (!current) throw new Error("Booking not found");
-        Object.assign(current, next);
-        return current;
-      }
+  const db = await database();
+  const [updated] = await db
+    .update(bookings)
+    .set({
+      ...next,
+      startsAt: next.startsAt ? new Date(next.startsAt) : null,
+    })
+    .where(eq(bookings.id, id))
+    .returning();
+  if (!updated) throw new Error("Booking not found");
+  return toBooking(updated);
+}
 
-      const db = await database();
-      const [updated] = await db
-        .update(bookings)
-        .set({
-          ...next,
-          startsAt: next.startsAt ? new Date(next.startsAt) : null,
-        })
-        .where(eq(bookings.id, data.id))
-        .returning();
-      if (!updated) throw new Error("Booking not found");
-      return toBooking(updated);
-    }
-
-    return insertBooking(data, "calendar");
-  },
-);
-
-export const deleteBooking = createServerFn({ method: "POST" })
-  .validator((data: { id: number; preview?: boolean }) => data)
-  .handler(async ({ data }) => {
-    await requireTeam(data.preview);
-    if (useMemory()) {
-      const index = memory.findIndex((booking) => booking.id === data.id);
-      if (index >= 0) memory.splice(index, 1);
-      return { ok: true };
-    }
-    const db = await database();
-    await db.delete(bookings).where(eq(bookings.id, data.id));
+export async function removeBooking(id: number) {
+  if (useMemory()) {
+    const index = memory.findIndex((booking) => booking.id === id);
+    if (index >= 0) memory.splice(index, 1);
     return { ok: true };
-  },
-);
-
-export const createFormBooking = createServerFn({ method: "POST" })
-  .validator(
-    (data: {
-      clientName: string;
-      phone: string;
-      service: string;
-      preferredDay: string;
-      preferredTime: string;
-      notes: string;
-    }) => data,
-  )
-  .handler(async ({ data }) => {
-    return insertBooking(
-      {
-        clientName: data.clientName,
-        phone: data.phone,
-        service: data.service,
-        staffId: null,
-        startsAt: nextSlotIso(data.preferredDay, data.preferredTime),
-        durationMinutes: 60,
-        status: "requested",
-        notes: data.notes,
-      },
-      "form",
-    );
-  },
-);
+  }
+  const db = await database();
+  await db.delete(bookings).where(eq(bookings.id, id));
+  return { ok: true };
+}

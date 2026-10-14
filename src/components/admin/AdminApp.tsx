@@ -15,13 +15,10 @@ import {
 } from "date-fns";
 import { AuthError, getUser, handleAuthCallback, login, logout } from "@netlify/identity";
 import { calendarStaff, staffById, unassignedColour } from "@/data/calendar-staff";
-import {
-  deleteBooking,
-  listBookings,
-  saveBooking,
-  type Booking,
-  type BookingStatus,
-} from "@/lib/bookings.functions";
+import { type Booking, type BookingStatus } from "@/lib/booking-store";
+import { deleteBooking } from "@/lib/delete-booking.functions";
+import { listBookings } from "@/lib/list-bookings.functions";
+import { saveBooking } from "@/lib/save-booking.functions";
 
 type View = "day" | "week" | "month";
 type StaffFilter = "all" | (typeof calendarStaff)[number]["id"];

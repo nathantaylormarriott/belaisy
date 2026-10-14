@@ -10,6 +10,7 @@ import { ReviewsCarousel } from "@/components/ReviewsCarousel";
 import { GoogleMapEmbed } from "@/components/GoogleMapEmbed";
 import { TikTokFeed } from "@/components/TikTokFeed";
 import { FaqSection } from "@/components/FaqSection";
+import { CommunitySupport } from "@/components/CommunitySupport";
 import { SiteRevealPage } from "@/components/SiteRevealPage";
 import { ServicesBentoGrid } from "@/components/ServicesBentoGrid";
 import { TeamScrollRail } from "@/components/TeamScrollRail";
@@ -323,6 +324,7 @@ function Home() {
         </section>
 
         <TikTokFeed />
+        <CommunitySupport />
         <FaqSection />
           </main>
         </div>

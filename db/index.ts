@@ -1,4 +1,4 @@
 import { drizzle } from "drizzle-orm/netlify-db";
-import * as schema from "./schema";
+import { bookings } from "./schema";
 
-export const db = drizzle({ schema });
+export const db = drizzle({ schema: { bookings } });
